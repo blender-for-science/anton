@@ -28,9 +28,11 @@ bl_info = {
     "author" : "Senthur Raj",
     "description" : "",
     "blender" : (2, 80, 0),
-    "version" : (0, 0, 1),
+    "version" : (0, 1, 0),
     "location" : "View3D",
     "warning" : "",
+    "wiki_url" : "https://github.com/blender-for-science/anton",
+    "tracker_url" : "https://github.com/blender-for-science/anton/issues",
     "category" : "Mesh"
 }
 

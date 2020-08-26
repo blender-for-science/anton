@@ -469,7 +469,7 @@ class Anton_OT_Definer(bpy.types.Operator):
                     data.append([])
                 else:
                     if 'vertex' in line:
-                        #IGNORING NORMALS FOR NOW
+                        # IGNORING NORMALS FOR NOW
                         data[-1].append(tuple(map(float, line[:-1].split(' ')[1:])))
 
                 line = f.readline()

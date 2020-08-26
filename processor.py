@@ -1,6 +1,6 @@
 import bpy
 import os
-from scipy.sparse import csr_matrix, csc_matrix
+from scipy.sparse import csc_matrix
 from scipy.sparse.linalg import spsolve
 from sklearn.neighbors import KDTree
 
@@ -8,7 +8,7 @@ from tqdm import tqdm
 import numpy as np
 
 #################################################
-# FUNCTIONS FROM pyOptFEM
+# START: Functions from pyOptFEM
 # -----------------------------------------------
 # pyOptFEM is a Python module providing simple and efficient vectorized routines for
 # assembling P1-Lagrange Finite Element matrices in 2D and 3D
@@ -293,7 +293,7 @@ def ElemStiffElasMatBa3DP1Vec(nme,q,me,volumes,la,mu):
     return Kg.T
 
 # ------------------------------------------------
-# FUNCTIONS FROM pyOptFEM
+# END: Functions from pyOptFEM
 ##################################################
 
 class Anton_OT_Operator(bpy.types.Operator):
