@@ -24,10 +24,6 @@ class Anton_PT_Panel(bpy.types.Panel):
                     slider=True, toggle=False, icon_only=False, event=False,
                     full_event=False, emboss=True)
 
-        row = layout.row()
-        rowsub = layout.row(align=True)
-        rowsub.prop(scene.anton, 'material')
-
         col = layout.column()
         col.operator('anton.initialize', text='Initialize')
 
@@ -58,6 +54,9 @@ class Anton_PT_Panel(bpy.types.Panel):
         rowsub.prop(scene.anton, "include_fixed")
         rowsub.label(text="")
         rowsub.prop(scene.anton, "include_forced")
+
+        rowsub = layout.row(align=True)
+        rowsub.prop(scene.anton, 'material')
 
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, "number_of_neighbours")
