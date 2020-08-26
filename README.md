@@ -5,3 +5,5 @@
 [![Gitter](https://badges.gitter.im/blender-for-science/community.svg)](https://gitter.im/blender-for-science/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 anton is a generative design framework built on Blender, the open-source 3D creation suite.
+
+![anton](./anton.gif)
