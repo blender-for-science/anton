@@ -39,9 +39,11 @@ from collections import OrderedDict
 from .preferences import AntonInstaller, AntonPreferences
 from .panel import Anton_PT_Panel
 from .properties import AntonPropertyGroup, ForcePropertyGroup
+from .initializer import Anton_OT_ForceUpdater, Anton_OT_Initializer
 
 classes = [AntonPreferences, AntonInstaller, Anton_PT_Panel,
-            AntonPropertyGroup, ForcePropertyGroup]
+            AntonPropertyGroup, ForcePropertyGroup, Anton_OT_ForceUpdater,
+            Anton_OT_Initializer]
 
 def register():
     for _class in classes:

@@ -82,7 +82,7 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
         workspace_path : StringProperty(
                 name="",
                 description="Path for the results",
-                default='/home/holycow/Desktop/workspace',
+                default='/tmp/',
                 subtype='DIR_PATH')
 
         volumina_ratio : FloatProperty(

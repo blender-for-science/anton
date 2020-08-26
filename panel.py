@@ -29,14 +29,14 @@ class Anton_PT_Panel(bpy.types.Panel):
         rowsub.prop(scene.anton, 'material')
 
         col = layout.column()    
-        col.operator('view3d.initialize', text='Initialize')
+        col.operator('anton.initialize', text='Initialize')
 
         row = layout.row()
         row.label(text=" ")
 
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, "number_of_forces")  
-        rowsub.operator('force.update', icon='ADD')
+        rowsub.operator('anton.forceupdate', icon='ADD')
 
         for item in scene.forceprop:
             row = layout.row()
