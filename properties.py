@@ -17,7 +17,6 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
         forced : BoolProperty(default=False)
         force_directioned : BoolProperty(default=False)
         defined : BoolProperty(default=False)
-        gmshed : BoolProperty(default=False)
 
         filename : StringProperty()
 

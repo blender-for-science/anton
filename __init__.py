@@ -40,14 +40,19 @@ from .preferences import AntonInstaller, AntonPreferences
 from .panel import Anton_PT_Panel
 from .properties import AntonPropertyGroup, ForcePropertyGroup
 from .initializer import Anton_OT_ForceUpdater, Anton_OT_Initializer
+from .definer import Anton_OT_DirectionUpdater, Anton_OT_Definer
 
 classes = [AntonPreferences, AntonInstaller, Anton_PT_Panel,
             AntonPropertyGroup, ForcePropertyGroup, Anton_OT_ForceUpdater,
-            Anton_OT_Initializer]
+            Anton_OT_Initializer, Anton_OT_DirectionUpdater, Anton_OT_Definer]
 
 def register():
     for _class in classes:
         bpy.utils.register_class(_class)
+
+    bpy.types.Scene.attributes = OrderedDict()
+    bpy.types.Scene.forced_magnitudes = OrderedDict()
+    bpy.types.Scene.forced_direction_signs = OrderedDict()
 
     bpy.types.Scene.anton = bpy.props.PointerProperty(type=AntonPropertyGroup)
     bpy.types.Scene.forceprop = bpy.props.CollectionProperty(type=ForcePropertyGroup)
@@ -55,3 +60,7 @@ def register():
 def unregister():
     for _class in classes:
         bpy.utils.unregister_class(_class)
+
+    del bpy.types.Scene.attributes
+    del bpy.types.Scene.forced_magnitudes
+    del bpy.types.Scene.forced_direction_signs

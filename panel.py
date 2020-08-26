@@ -20,22 +20,22 @@ class Anton_PT_Panel(bpy.types.Panel):
         row.label(text=" ")
 
         row = layout.row(align=True)
-        row.prop(scene.anton, "mode", icon='NONE', expand=True, 
-                    slider=True, toggle=False, icon_only=False, event=False, 
+        row.prop(scene.anton, "mode", icon='NONE', expand=True,
+                    slider=True, toggle=False, icon_only=False, event=False,
                     full_event=False, emboss=True)
-      
+
         row = layout.row()
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, 'material')
 
-        col = layout.column()    
+        col = layout.column()
         col.operator('anton.initialize', text='Initialize')
 
         row = layout.row()
         row.label(text=" ")
 
         rowsub = layout.row(align=True)
-        rowsub.prop(scene.anton, "number_of_forces")  
+        rowsub.prop(scene.anton, "number_of_forces")
         rowsub.operator('anton.forceupdate', icon='ADD')
 
         for item in scene.forceprop:
@@ -43,36 +43,36 @@ class Anton_PT_Panel(bpy.types.Panel):
             row.label(text=' ')
             row.prop(item, 'magnitude')
             scene.forced_magnitudes['FORCE_{}'.format(item.name)] = item.magnitude
-            row.operator('direction.update', icon='FULLSCREEN_ENTER').force_id = 'FORCE_{}'.format(item.name)
+            row.operator('anton.directionupdate', icon='FULLSCREEN_ENTER').force_id = 'FORCE_{}'.format(item.name)
 
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, "cl_max")
 
-        col = layout.column()    
-        col.operator('view3d.gmsh', text='Define')
+        col = layout.column()
+        col.operator('anton.define', text='Define')
 
         row = layout.row()
         row.label(text=" ")
 
         rowsub = layout.row(align=True)
-        rowsub.prop(scene.anton, "include_fixed")  
+        rowsub.prop(scene.anton, "include_fixed")
         rowsub.label(text="")
-        rowsub.prop(scene.anton, "include_forced")  
+        rowsub.prop(scene.anton, "include_forced")
 
         rowsub = layout.row(align=True)
-        rowsub.prop(scene.anton, "number_of_neighbours")  
-        rowsub.prop(scene.anton, "rmin") 
+        rowsub.prop(scene.anton, "number_of_neighbours")
+        rowsub.prop(scene.anton, "rmin")
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, "volumina_ratio")
         rowsub.prop(scene.anton, "penalty_exponent")
-        
+
         rowsub = layout.row(align=True)
-        rowsub.prop(scene.anton, "emin")        
+        rowsub.prop(scene.anton, "emin")
         rowsub.prop(scene.anton, "density_change")
 
         # row = layout.row(align=True)
-        # row.prop(scene.anton, "filter_mode", icon='NONE', expand=True, 
-        #             slider=True, toggle=False, icon_only=False, event=False, 
+        # row.prop(scene.anton, "filter_mode", icon='NONE', expand=True,
+        #             slider=True, toggle=False, icon_only=False, event=False,
         #             full_event=False, emboss=True)
 
         rowsub = layout.row(align=True)
@@ -81,7 +81,7 @@ class Anton_PT_Panel(bpy.types.Panel):
         row = layout.row()
         row.label(text=" ")
 
-        col = layout.column()    
+        col = layout.column()
         col.operator('view3d.optimize', text='Optimize')
 
         row = layout.row()
@@ -97,7 +97,7 @@ class Anton_PT_Panel(bpy.types.Panel):
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, 'viz_iteration')
 
-        col = layout.column()    
+        col = layout.column()
         col.operator('view3d.viz', text='Visualize')
 
         row = layout.row()
