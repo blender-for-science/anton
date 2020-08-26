@@ -1,6 +1,6 @@
 import bpy
 import os
-from scipy.sparse import coo_matrix, csr_matrix, csc_matrix
+from scipy.sparse import csr_matrix, csc_matrix
 from scipy.sparse.linalg import spsolve
 from sklearn.neighbors import KDTree
 
@@ -36,7 +36,6 @@ def BuildIgJg3DP1VF(me,nq):
     nme=me.shape[1]
     I=BuildIkVec(me,nq)
     ii=(np.array(np.arange(0,12),dtype=np.int32,ndmin=2).T)*np.ones((1,12),dtype=np.int32)
-    jj=ii.T.reshape(144)
     ii.shape = (144)
 
     Ig=np.ndarray(shape=(144,nme),dtype=np.int32)
@@ -71,7 +70,8 @@ def ComputeGradientVecTr(q,me):
     return G
 
 def ElemStiffElasMatBa3DP1Vec(nme,q,me,volumes,la,mu):
-    r"""  Computes all the element elastic stiffness  matrices :math:`\mathbb{K}^e(T_k)` for :math:`k\in\{0,\hdots,\nme-1\}`
+    """
+    Computes all the element elastic stiffness  matrices :math:`\mathbb{K}^e(T_k)` for :math:`k\in\{0,\hdots,\nme-1\}`
     in local *alternate* basis.
 
     :param nme: number of mesh elements,
@@ -471,8 +471,6 @@ class Anton_OT_Operator(bpy.types.Operator):
             edofmat = np.array([np.arange(12)%3]*nme) + 3*elements[:, np.arange(12)//3]
             E0 = youngs
             Emin = scene.anton.emin
-
-            D = self.compute_Dmat(poisson)
 
             ncoords = np.append(np.ones((nq, 1)), nodes, axis=1)[elements]
             element_centers = 0.25 * np.sum(ncoords[:, :, 1:], axis=1)

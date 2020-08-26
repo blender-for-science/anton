@@ -133,7 +133,7 @@ class Anton_OT_Initializer(bpy.types.Operator):
                 active_object.select_set(True)
 
                 for _obj in objects:
-                    u_bool_mod = bpy.ops.object.modifier_add(type='BOOLEAN')
+                    bpy.ops.object.modifier_add(type='BOOLEAN')
                     bpy.context.object.modifiers["Boolean"].operation = 'UNION'
                     bpy.context.object.modifiers["Boolean"].object = _obj
                     bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Boolean")
@@ -147,9 +147,7 @@ class Anton_OT_Initializer(bpy.types.Operator):
                 scene.anton.filename = active_object.name
 
                 bpy.ops.import_mesh.stl(filepath=os.path.join(scene.anton.workspace_path, 'hull.stl'))
-                bound_object = bpy.context.object
-
-                s_bool_mod = bpy.ops.object.modifier_add(type='BOOLEAN')
+                bpy.ops.object.modifier_add(type='BOOLEAN')
                 bpy.context.object.modifiers["Boolean"].operation = 'DIFFERENCE'
                 bpy.context.object.modifiers["Boolean"].object = active_object
                 bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Boolean")

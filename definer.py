@@ -117,7 +117,6 @@ class Anton_OT_DirectionUpdater(bpy.types.Operator):
                 break
 
         bpy.ops.object.mode_set(mode='OBJECT')
-        face_vertices = set()
         centroids = list()
         normals = list()
 
@@ -246,8 +245,8 @@ class Anton_OT_Definer(bpy.types.Operator):
                         i += 1
 
             # GET TRIANGLES FROM DATA
-            for i in range(len(data)):
-                triangles[i+1] = [points[data[i][0]], points[data[i][1]], points[data[i][2]]]
+            for i, _data in enumerate(data):
+                triangles[i+1] = [points[_data[0]], points[_data[1]], points[_data[2]]]
 
             # GET EDGES FROM TRIANGLES
             i = 1
@@ -415,7 +414,7 @@ class Anton_OT_Definer(bpy.types.Operator):
             distributed_force[_force_id] = forced_magnitudes[_force_id]/np.sum(force_per_areas[_force_id])
 
         sl = geo.addSurfaceLoop(list(curve_loop.keys()))
-        v = geo.addVolume([sl])
+        _ = geo.addVolume([sl])
 
         gmsh.model.geo.synchronize()
         gmsh.option.setNumber("Mesh.Algorithm", 0)

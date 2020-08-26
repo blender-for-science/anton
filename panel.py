@@ -1,5 +1,4 @@
 import bpy
-from bpy.props import BoolVectorProperty
 
 class Anton_PT_Panel(bpy.types.Panel):
     bl_idname = 'ANTON_PT_panel'
@@ -15,9 +14,6 @@ class Anton_PT_Panel(bpy.types.Panel):
         row = layout.row()
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, 'workspace_path')
-
-        row = layout.row()
-        row.label(text=" ")
 
         row = layout.row(align=True)
         row.prop(scene.anton, "mode", icon='NONE', expand=True,
