@@ -47,7 +47,7 @@ class Anton_OT_ForceUpdater(bpy.types.Operator):
                     new = scene.forceprop.add()
                     new.name = str(size+1)
                     new.direction_boolean = False
-                    
+
                     temp_mat = bpy.data.materials.new(name='FORCE_{}'.format(i+1))
                     temp_mat.diffuse_color = self.diffuse_library[i]
                     active_object.data.materials.append(temp_mat)
@@ -129,7 +129,7 @@ class Anton_OT_Initializer(bpy.types.Operator):
                         f.write('endfacet\n')
 
                     f.write('endsolid\n')
-                
+
                 active_object.select_set(True)
 
                 for _obj in objects:
@@ -143,16 +143,16 @@ class Anton_OT_Initializer(bpy.types.Operator):
                     bpy.ops.object.delete()
 
                     active_object.select_set(True)
-                
+
                 scene.anton.filename = active_object.name
 
-                bpy.ops.import_mesh.stl(filepath=os.path.join(scene.anton.workspace_path, 'hull.stl'))    
+                bpy.ops.import_mesh.stl(filepath=os.path.join(scene.anton.workspace_path, 'hull.stl'))
                 bound_object = bpy.context.object
 
                 s_bool_mod = bpy.ops.object.modifier_add(type='BOOLEAN')
                 bpy.context.object.modifiers["Boolean"].operation = 'DIFFERENCE'
                 bpy.context.object.modifiers["Boolean"].object = active_object
-                bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Boolean")       
+                bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Boolean")
 
                 bpy.ops.object.select_all(action='DESELECT')
                 active_object.select_set(True)
@@ -163,7 +163,7 @@ class Anton_OT_Initializer(bpy.types.Operator):
                 active_object.select_set(True)
                 bpy.ops.object.delete()
 
-                bpy.ops.import_mesh.stl(filepath=os.path.join(scene.anton.workspace_path, scene.anton.filename + '.stl'))      
+                bpy.ops.import_mesh.stl(filepath=os.path.join(scene.anton.workspace_path, scene.anton.filename + '.stl'))
 
             else:
                 scene.anton.filename = active_object.name
@@ -175,7 +175,7 @@ class Anton_OT_Initializer(bpy.types.Operator):
                 bpy.ops.import_mesh.stl(filepath=os.path.join(scene.anton.workspace_path, scene.anton.filename + '.stl'))
 
             active_object = bpy.context.active_object
-            
+
             scene.anton.initialized = True
             self.report({'INFO'}, 'Mode: {}, Material: {}'.format(
                                                                 scene.anton.mode,

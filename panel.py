@@ -82,7 +82,7 @@ class Anton_PT_Panel(bpy.types.Panel):
         row.label(text=" ")
 
         col = layout.column()
-        col.operator('view3d.optimize', text='Optimize')
+        col.operator('anton.process', text='Optimize')
 
         row = layout.row()
         row.label(text=" ")

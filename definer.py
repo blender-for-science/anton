@@ -44,7 +44,7 @@ def draw_arrow(gp_frame, p: tuple, norm: tuple, d: tuple, size: int, reverse: bo
     gp_stroke.display_mode = '3DSPACE'
 
     orient = np.sign(np.dot(np.array(norm), np.array(d)))
-    
+
     t = tuple(np.array(p) + orient * size * np.array(d))
     norm_d = np.array((d[1], -1*d[0], 0))
 
@@ -52,7 +52,7 @@ def draw_arrow(gp_frame, p: tuple, norm: tuple, d: tuple, size: int, reverse: bo
         norm_d = np.array((0, -1*d[2], d[1]))
     elif np.linalg.norm(norm_d) == 0:
         norm_d = np.array((0, 1, 0))
-        
+
     if reverse:
         start = t
         end = tuple(np.array(p) + 0.15 * orient * np.array(d))
@@ -61,14 +61,14 @@ def draw_arrow(gp_frame, p: tuple, norm: tuple, d: tuple, size: int, reverse: bo
         start = p
         end = t
         sign = -1.0
-    
+
     arrow_left = tuple(np.array(end) + 0.1 * norm_d)
     arrow_top = tuple(np.array(end) - sign * orient * 0.1 * np.array(d))
     arrow_right = tuple(np.array(end) - 0.1 * norm_d)
-        
+
     gp_stroke.points.add(count=5)
     gp_stroke.points[0].co = start
-    gp_stroke.points[1].co = end   
+    gp_stroke.points[1].co = end
     gp_stroke.points[2].co = arrow_left
     gp_stroke.points[3].co = arrow_top
     gp_stroke.points[4].co = arrow_right
@@ -102,7 +102,7 @@ class Anton_OT_DirectionUpdater(bpy.types.Operator):
             bpy.ops.object.mode_set(mode='EDIT')
 
         bpy.ops.mesh.select_all(action = 'DESELECT')
-        
+
         active_object.vertex_groups.active_index = active_object.vertex_groups['DIRECTION_{}'.format(str(self.force_id).split('_')[-1])].index
         bpy.ops.object.vertex_group_select()
 
@@ -133,7 +133,7 @@ class Anton_OT_DirectionUpdater(bpy.types.Operator):
                     centroids.append(centroid)
                     normals.append(face.normal)
 
-        
+
         if len(centroids) > 0 and np.linalg.norm(direction) > 0:
 
             gp_layer = init_grease_pencil(gpencil_obj_name=self.force_id)
@@ -318,12 +318,12 @@ class Anton_OT_Definer(bpy.types.Operator):
 
             for i in range(scene.anton.number_of_forces):
                 bpy.ops.mesh.select_all(action = 'DESELECT')
-                
+
                 active_object.vertex_groups.active_index = active_object.vertex_groups['DIRECTION_{}'.format(i+1)].index
                 bpy.ops.object.vertex_group_select()
 
                 bpy.ops.object.mode_set(mode='OBJECT')
- 
+
                 for edge in active_object.data.edges:
                     if edge.select:
                         forced_directions['FORCE_{}'.format(i+1)] = edge.index + 1
@@ -361,7 +361,7 @@ class Anton_OT_Definer(bpy.types.Operator):
                 triangles[i+1] = [points[data[i][0]], points[data[i][1]], points[data[i][2]]]
 
             #GET EDGES FROM TRIANGLES
-            i = 1    
+            i = 1
             for _triangle in triangles.values():
                 for _edge in self.get_edge_indices(_triangle):
                     if _edge not in edges.keys() and _edge[::-1] not in edges.keys():
@@ -380,20 +380,20 @@ class Anton_OT_Definer(bpy.types.Operator):
 
             gmsh.initialize()
             gmsh.option.setNumber('General.Terminal', 1)
-            
+
             nodes, elements, fixed_nodes, no_design_nodes, forced_nodes, directions, distributed_force = self.create_geo(
-                                                            scene.anton.workspace_path, 
-                                                            scene.anton.filename, 
+                                                            scene.anton.workspace_path,
+                                                            scene.anton.filename,
                                                             fixed_faces,
                                                             no_design_faces,
                                                             forced_faces,
                                                             scene.forced_magnitudes,
                                                             forced_directions,
-                                                            scene.forced_direction_signs, 
+                                                            scene.forced_direction_signs,
                                                             geo_points,
                                                             geo_edges,
-                                                            points, 
-                                                            edges, 
+                                                            points,
+                                                            edges,
                                                             curve_loop,
                                                             scene.anton.cl_max)
 
@@ -417,7 +417,7 @@ class Anton_OT_Definer(bpy.types.Operator):
                             if _node in node_loads[_force_id].keys():
                                 node_loads[_force_id][_node] += distributed_force[_force_id] * _area/3.0
                             else:
-                                node_loads[_force_id][_node] = distributed_force[_force_id] * _area/3.0 
+                                node_loads[_force_id][_node] = distributed_force[_force_id] * _area/3.0
 
             scene.attributes['LOAD'] = OrderedDict()
 
@@ -429,13 +429,13 @@ class Anton_OT_Definer(bpy.types.Operator):
 
             np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.nodes'), nodes)
             np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.elements'), elements)
-            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.fixed'), 
+            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.fixed'),
                         np.array(list(fixed_nodes), dtype=np.int))
 
-            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.nds'), 
+            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.nds'),
                         np.array(list(no_design_nodes), dtype=np.int))
 
-            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.material'), 
+            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.material'),
                                     np.array([
                                         self.material_library[scene.anton.material]['YOUNGS'],
                                         self.material_library[scene.anton.material]['POISSON']]))
@@ -444,32 +444,32 @@ class Anton_OT_Definer(bpy.types.Operator):
 
             gmsh.finalize()
 
-            scene.anton.defined = True            
+            scene.anton.defined = True
             self.report({'INFO'}, 'Nodes: {}, Elements: {}'.format(len(nodes), len(elements)))
             return {'FINISHED'}
-        
+
         else:
             scene.anton.defined = False
             self.report({'ERROR'}, 'Problem ill-defined')
             return {'CANCELLED'}
 
 
-    def create_geo(self, 
-                    path, 
-                    filename, 
+    def create_geo(self,
+                    path,
+                    filename,
                     fixed_faces,
-                    no_design_faces, 
+                    no_design_faces,
                     forced_faces,
                     forced_magnitudes,
                     forced_directions,
                     forced_direction_signs,
                     geo_points,
                     geo_edges,
-                    points, 
-                    edges, 
+                    points,
+                    edges,
                     curve_loop,
                     clmax):
-    
+
         geo = gmsh.model.geo
         lc = clmax
 
@@ -537,7 +537,7 @@ class Anton_OT_Definer(bpy.types.Operator):
         gmsh.model.geo.synchronize()
         gmsh.option.setNumber("Mesh.Algorithm", 0)
         gmsh.option.setNumber("Mesh.ElementOrder", 1)
-        
+
         gmsh.option.setNumber("Mesh.Optimize", 1)
         gmsh.option.setNumber("Mesh.QualityType", 2)
         gmsh.option.setNumber("Mesh.SaveAll", 1)
@@ -608,5 +608,5 @@ class Anton_OT_Definer(bpy.types.Operator):
         return 0.5 * np.linalg.norm(v3)
 
 
-        
+
 
