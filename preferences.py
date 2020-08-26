@@ -10,7 +10,7 @@ class AntonPreferences(bpy.types.AddonPreferences):
         Pip._ensure_user_site_package()
 
         layout = self.layout
-        deps = ['gmsh_api', 'tqdm', 'sklearn', 'scipy']
+        deps = ['gmsh_api', 'tqdm', 'sklearn', 'scipy', 'numpy']
 
         flag = True
         for _module in deps:
@@ -36,16 +36,19 @@ class AntonInstaller(bpy.types.Operator):
             Pip.install('gmsh-api')
             Pip.install('scikit-learn')
             Pip.install('scipy')
+            Pip.install('numpy')
 
             import gmsh_api
             from tqdm import tqdm
             import sklearn
             import scipy
+            import numpy
 
             for _ in tqdm(range(1)):
                 print("gmsh-api: ", gmsh_api.__version__)
                 print("scikit-learn: ", sklearn.__version__)
                 print("scipy: ", scipy.__version__)
+                print("numpy: ", numpy.__version__)
 
             self.report({'INFO'}, 'Successfully installed required modules.')
         except ModuleNotFoundError:
