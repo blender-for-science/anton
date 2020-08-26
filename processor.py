@@ -453,8 +453,8 @@ class Anton_OT_Operator(bpy.types.Operator):
             for _node_id in load.keys():
                 forced_elements = np.append(forced_elements, np.where(elements==_node_id)[0])
                 _id = 3*_node_id
-                for _dim, value in enumerate(load[_node_id]):
-                    F[_id + _dim] = value
+                for _dim, _value in enumerate(load[_node_id]):
+                    F[_id + _dim] = _value
 
             if scene.anton.include_fixed:
                 no_design_set = np.append(no_design_set, fixed_elements)
@@ -501,10 +501,13 @@ class Anton_OT_Operator(bpy.types.Operator):
                 sensitivity = np.matmul(np.matmul(UeT, Ke), Ue).reshape(nme)
                 sensitivity = (pref * densities.reshape(nme)**(penalty - 1) * sensitivity).reshape(nme, 1)
 
-                fsensdenom = densities.T[0] * distances_sum
-                fsensdenom[fsensdenom<0.001] = 0.001
-                fsensitivity = np.sum(densities[structure].reshape(nme, n_neighbours) * distances * sensitivity[structure].reshape(nme, n_neighbours), axis=1) / fsensdenom
-                # fsensitivity.reshape(len(elements), 1)
+                if scene.anton.sensitivity_filter:
+                    fsensdenom = densities.T[0] * distances_sum
+                    fsensdenom[fsensdenom<0.001] = 0.001
+                    fsensitivity = np.sum(densities[structure].reshape(nme, n_neighbours) * distances * sensitivity[structure].reshape(nme, n_neighbours), axis=1) / fsensdenom
+                    fsensitivity = fsensitivity.reshape(len(elements), 1)
+                else:
+                    fsensitivity = sensitivity
 
                 min_sens = 0.001
                 max_sens = 1e9
@@ -521,7 +524,7 @@ class Anton_OT_Operator(bpy.types.Operator):
                                                     1.0,
                                                     np.minimum(
                                                         densities + density_change,
-                                                        densities * (-1 * (fsensitivity.reshape(len(elements), 1)/mid_sens))**0.5
+                                                        densities * (-1 * (fsensitivity/mid_sens))**0.5
                                                     )
                                         )))
 
@@ -533,8 +536,12 @@ class Anton_OT_Operator(bpy.types.Operator):
                     else:
                         max_sens = mid_sens
 
-                fdensities = np.sum(distances * step_densities[structure].reshape(nme, n_neighbours), axis=1)/distances_sum
-                densities = fdensities.reshape(nme, 1)
+                if scene.anton.density_filter:
+                    fdensities = np.sum(distances * step_densities[structure].reshape(nme, n_neighbours), axis=1)/distances_sum
+                    densities = fdensities.reshape(nme, 1)
+                else:
+                    densities = step_densities
+
                 np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'_i{}.densities'.format(_step+1)), densities)
 
             return {'FINISHED'}

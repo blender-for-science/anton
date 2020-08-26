@@ -8,7 +8,7 @@ class ForcePropertyGroup(bpy.types.PropertyGroup):
                                 default=1.0,
                                 min=0.0,
                                 precision=2,
-                                description="Magnitude of the specified force.")
+                                description="Magnitude of the specified force")
 
 
 class AntonPropertyGroup(bpy.types.PropertyGroup):
@@ -23,12 +23,22 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
         include_fixed : BoolProperty(
                 name='Fixed',
                 default=False,
-                description='To assign fixed elements, a density of 1.0.')
+                description='To assign fixed elements, a density of 1.0')
 
         include_forced : BoolProperty(
                 name='Forced',
                 default=False,
-                description='To assign forced elements, a density of 1.0.')
+                description='To assign forced elements, a density of 1.0')
+
+        density_filter : BoolProperty(
+                name='Density',
+                default=False,
+                description='Filter densities')
+
+        sensitivity_filter : BoolProperty(
+                name='Sensitivity',
+                default=False,
+                description='Filter sensitivities')
 
         cl_max : FloatProperty(
                 name="",
@@ -36,7 +46,7 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 min=0.1,
                 max = 5.0,
                 precision=3,
-                description="Maximum size of the element.")
+                description="Maximum size of the element")
 
         rmin : FloatProperty(
                 name="",
@@ -44,7 +54,7 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 min=0.1,
                 max = 5.0,
                 precision=3,
-                description="Size of filter.")
+                description="Size of filter")
 
         density_change : FloatProperty(
                 name="",
@@ -104,7 +114,7 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 name="Forces",
                 default=1,
                 min=1,
-                description="Number of forces acting on the model.")
+                description="Number of forces acting on the model")
 
         number_of_iterations : IntProperty(
                 name="",
@@ -134,7 +144,7 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 name="",
                 default=7,
                 min=5,
-                description="Number of nearest neighbours for filtering.")
+                description="Number of nearest neighbours for filtering")
 
         mode : EnumProperty(
                 name='mode',
@@ -143,15 +153,6 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                         ('HULL', 'Hull', 'Undefined design space')],
                 default='SHAPE'
         )
-
-        # filter_mode : EnumProperty(
-        #         name='filter_mode',
-        #         items=[
-        #                 ('SENS', 'Sens', 'Sensitivity filter'),
-        #                 ('DENS', 'Dens', 'Density filter'),
-        #                 ('BOTH', 'Both', 'Both filters')],
-        #         default='DENS'
-        # )
 
         material : EnumProperty(
                 name='',

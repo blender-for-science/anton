@@ -47,34 +47,32 @@ class Anton_PT_Panel(bpy.types.Panel):
         row.label(text=" ")
 
         rowsub = layout.row(align=True)
-        rowsub.prop(scene.anton, "include_fixed")
-        rowsub.label(text="")
-        rowsub.prop(scene.anton, "include_forced")
-
-        rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, 'material')
-
-        rowsub = layout.row(align=True)
-        rowsub.prop(scene.anton, "number_of_neighbours")
-        rowsub.prop(scene.anton, "rmin")
-        rowsub = layout.row(align=True)
-        rowsub.prop(scene.anton, "volumina_ratio")
-        rowsub.prop(scene.anton, "penalty_exponent")
 
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, "emin")
         rowsub.prop(scene.anton, "density_change")
 
-        # row = layout.row(align=True)
-        # row.prop(scene.anton, "filter_mode", icon='NONE', expand=True,
-        #             slider=True, toggle=False, icon_only=False, event=False,
-        #             full_event=False, emboss=True)
+        rowsub = layout.row(align=True)
+        rowsub.prop(scene.anton, "volumina_ratio")
+        rowsub.prop(scene.anton, "penalty_exponent")
+
+        rowsub = layout.row(align=True)
+        rowsub.alignment = 'CENTER'
+        rowsub.prop(scene.anton, "density_filter")
+        rowsub.prop(scene.anton, "sensitivity_filter")
+
+        rowsub = layout.row(align=True)
+        rowsub.prop(scene.anton, "number_of_neighbours")
+        rowsub.prop(scene.anton, "rmin")
 
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, 'number_of_iterations')
 
-        row = layout.row()
-        row.label(text=" ")
+        rowsub = layout.row(align=True)
+        rowsub.alignment = 'CENTER'
+        rowsub.prop(scene.anton, "include_fixed")
+        rowsub.prop(scene.anton, "include_forced")
 
         col = layout.column()
         col.operator('anton.process', text='Generate')
