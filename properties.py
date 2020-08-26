@@ -37,7 +37,7 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
 
         sensitivity_filter : BoolProperty(
                 name='Sensitivity',
-                default=False,
+                default=True,
                 description='Filter sensitivities')
 
         cl_max : FloatProperty(
