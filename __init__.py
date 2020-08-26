@@ -42,9 +42,10 @@ from .properties import AntonPropertyGroup, ForcePropertyGroup
 from .initializer import Anton_OT_ForceUpdater, Anton_OT_Initializer
 from .definer import Anton_OT_DirectionUpdater, Anton_OT_Definer
 from .processor import Anton_OT_Operator
+from .visualizer import Anton_OT_Visualizer
 
 classes = [AntonPreferences, AntonInstaller, Anton_PT_Panel, Anton_OT_Operator,
-            AntonPropertyGroup, ForcePropertyGroup, Anton_OT_ForceUpdater,
+            AntonPropertyGroup, ForcePropertyGroup, Anton_OT_ForceUpdater, Anton_OT_Visualizer,
             Anton_OT_Initializer, Anton_OT_DirectionUpdater, Anton_OT_Definer]
 
 def register():

@@ -82,7 +82,7 @@ class Anton_PT_Panel(bpy.types.Panel):
         row.label(text=" ")
 
         col = layout.column()
-        col.operator('anton.process', text='Optimize')
+        col.operator('anton.process', text='Generate')
 
         row = layout.row()
         row.label(text=" ")
@@ -98,7 +98,7 @@ class Anton_PT_Panel(bpy.types.Panel):
         rowsub.prop(scene.anton, 'viz_iteration')
 
         col = layout.column()
-        col.operator('view3d.viz', text='Visualize')
+        col.operator('anton.visualize', text='Visualize')
 
         row = layout.row()
         row.label(text=" ")
