@@ -3,21 +3,23 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-anton v0.1.0
-============
+Welcome to anton's documentation!
+=================================
 
-Contents
-========
+anton is a generative design framework built on Blender, the open-source 3D creation suite.
+
+.. image:: ../anton.gif
+   :alt: anton
 
 .. toctree::
+   :hidden:
    :maxdepth: 2
 
+   introduction
+   installation
+   interface
    anton
+   release
+   license
 
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
