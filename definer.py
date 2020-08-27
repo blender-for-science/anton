@@ -307,13 +307,11 @@ class Anton_OT_Definer(bpy.types.Operator):
                             else:
                                 node_loads[_force_id][_node] = distributed_force[_force_id] * _area/3.0
 
-            scene.attributes['LOAD'] = OrderedDict()
-
             for _force_id in directions.keys():
                 direction_vector = np.array(directions[_force_id])
                 for _node_id in node_loads[_force_id].keys():
                     force_magnitude = node_loads[_force_id][_node_id]
-                    scene.attributes['LOAD'][int(_node_id)] = force_magnitude * direction_vector
+                    scene.load[int(_node_id)] = force_magnitude * direction_vector
 
             np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.nodes'), nodes)
             np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.elements'), elements)
@@ -323,7 +321,6 @@ class Anton_OT_Definer(bpy.types.Operator):
             np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.nds'),
                         np.array(list(no_design_nodes), dtype=np.int))
 
-            scene.attributes['OPT'] = OrderedDict()
             gmsh.finalize()
 
             scene.anton.defined = True
