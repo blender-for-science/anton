@@ -12,6 +12,24 @@ class ForcePropertyGroup(bpy.types.PropertyGroup):
 
 
 class AntonPropertyGroup(bpy.types.PropertyGroup):
+        """Base class for dynamically defined sets of properties that are acessed
+        from :class: `Anton_PT_Panel` and used by all the operator classes.
+
+        Attributes:
+                initialized (BoolProperty): A boolean property to check if the problem has been initialzed.
+                forced (BoolProperty): A boolean property to check if all the forces acting on the model has been defined.
+                force_directioned (BoolProperty): A boolean property to check if directions for all the specified forces has been defined.
+                defined (BoolProperty): A boolean property to check if the problem has been defined.
+                filename (StringProperty): A string property that stores the active object's name.
+
+                workspace_path (StringProperty): A string property that points at the workspace path
+                        in which temporary variables are created/stored. Defaults to /tmp/
+                mode (EnumProperty): A enum property that defines the design space. Choose `Shape` to use existing geometry as is 
+                        for the design space definition or choose `HULL` to form a geometry around the existing objects. Existing objects are considered
+                        as obstacles and are not included in the design space definition. Defaults to `Shape`.
+                
+                number_of_forces (IntProperty): An integer property that defines the number of forces acting on the model.
+        """
 
         initialized : BoolProperty(default=False)
         forced : BoolProperty(default=False)
@@ -19,6 +37,26 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
         defined : BoolProperty(default=False)
 
         filename : StringProperty()
+
+        workspace_path : StringProperty(
+                name="",
+                description="Path for the results",
+                default='/tmp/',
+                subtype='DIR_PATH')
+
+        mode : EnumProperty(
+                name='mode',
+                items=[
+                        ('SHAPE', 'Shape', 'Defined design space'),
+                        ('HULL', 'Hull', 'Undefined design space')],
+                default='SHAPE'
+        )
+
+        number_of_forces : IntProperty(
+                name="Forces",
+                default=1,
+                min=1,
+                description="Number of forces acting on the model")
 
         include_fixed : BoolProperty(
                 name='Fixed',
@@ -88,12 +126,6 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 precision=2,
                 description="Sensitivity of metaballs")
 
-        workspace_path : StringProperty(
-                name="",
-                description="Path for the results",
-                default='/tmp/',
-                subtype='DIR_PATH')
-
         volumina_ratio : FloatProperty(
                 name="",
                 default=0.4,
@@ -109,12 +141,6 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 max = 15.0,
                 precision=3,
                 description="Exponent for the penalty function by using SIMP method")
-
-        number_of_forces : IntProperty(
-                name="Forces",
-                default=1,
-                min=1,
-                description="Number of forces acting on the model")
 
         number_of_iterations : IntProperty(
                 name="",
@@ -145,14 +171,6 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 default=7,
                 min=5,
                 description="Number of nearest neighbours for filtering")
-
-        mode : EnumProperty(
-                name='mode',
-                items=[
-                        ('SHAPE', 'Shape', 'Defined design space'),
-                        ('HULL', 'Hull', 'Undefined design space')],
-                default='SHAPE'
-        )
 
         material : EnumProperty(
                 name='',

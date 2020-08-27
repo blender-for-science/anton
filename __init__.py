@@ -51,8 +51,7 @@ classes = [AntonPreferences, AntonInstaller, Anton_PT_Panel, Anton_OT_Processor,
             Anton_OT_Initializer, Anton_OT_DirectionUpdater, Anton_OT_Definer]
 
 def register():
-    """
-    Registers Preferences, Installer, Panel, PropertyGroup, ForcePropertyGroup,
+    """Registers Preferences, Installer, Panel, PropertyGroup, ForcePropertyGroup,
     ForceUpdater, Initializer, DirectionUpdater, Definer, Processor, and
     Visualizer classes and instantiates scene variables load, forced_magnitudes
     and forced_direction_signs that are used by Processor.
@@ -69,8 +68,7 @@ def register():
     bpy.types.Scene.forceprop = bpy.props.CollectionProperty(type=ForcePropertyGroup)
 
 def unregister():
-    """
-    Unregisters Preferences, Installer, Panel, PropertyGroup, ForcePropertyGroup,
+    """Unregisters Preferences, Installer, Panel, PropertyGroup, ForcePropertyGroup,
     ForceUpdater, Initializer, DirectionUpdater, Definer, Processor, and
     Visualizer classes and deletes all the scene variables used by Processor.
     """
