@@ -296,7 +296,7 @@ def ElemStiffElasMatBa3DP1Vec(nme,q,me,volumes,la,mu):
 # END: Functions from pyOptFEM
 ##################################################
 
-class Anton_OT_Operator(bpy.types.Operator):
+class Anton_OT_Processor(bpy.types.Operator):
     bl_idname = 'anton.process'
     bl_label = 'Anton_Processor'
     bl_description = 'Start Optimization'
@@ -423,7 +423,6 @@ class Anton_OT_Operator(bpy.types.Operator):
             youngs = self.material_library[scene.anton.material]['YOUNGS']
             poisson = self.material_library[scene.anton.material]['POISSON']
 
-            load = scene.attributes['LOAD']
             no_design_set = np.array([], dtype=np.int)
 
             penalty = scene.anton.penalty_exponent
@@ -450,10 +449,10 @@ class Anton_OT_Operator(bpy.types.Operator):
             F = np.zeros((ndofs, 1), dtype=np.float)
 
             forced_elements = np.array([], dtype=np.int)
-            for _node_id in load.keys():
+            for _node_id in scene.load.keys():
                 forced_elements = np.append(forced_elements, np.where(elements==_node_id)[0])
                 _id = 3*_node_id
-                for _dim, _value in enumerate(load[_node_id]):
+                for _dim, _value in enumerate(scene.load[_node_id]):
                     F[_id + _dim] = _value
 
             if scene.anton.include_fixed:
