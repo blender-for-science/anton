@@ -4,6 +4,9 @@ import os
 from scipy.spatial import ConvexHull
 
 class Anton_OT_ForceUpdater(bpy.types.Operator):
+    """Adds materials and vertex groups corresponding to the number
+    of forces acting on the model. 
+    """
     bl_idname = "anton.forceupdate"
     bl_label = ""
 
@@ -21,6 +24,11 @@ class Anton_OT_ForceUpdater(bpy.types.Operator):
                         (255/255, 139/255, 0/255, 1)]
 
     def execute(self, context):
+        """Adds ``NATIVE``, ``FIXED``, ``NODESIGNSPACE`` and ``FORCE_{}`` materials and
+        vertex groups ``DIRECTION_{}`` to the active object. 
+
+        :return: ``FINISHED`` if successful, ``CANCELLED`` otherwise
+        """
         scene = context.scene
         active_object = bpy.context.active_object
 
@@ -42,7 +50,7 @@ class Anton_OT_ForceUpdater(bpy.types.Operator):
             for i in range(scene.anton.number_of_forces):
                 if str('FORCE_{}'.format(i+1)) not in bpy.data.materials:
 
-                    #TAKE CARE OF POPPING EXCESS FORCES
+                    # Take care of popping of excess forces
                     size = len(scene.forceprop)
                     new = scene.forceprop.add()
                     new.name = str(size+1)
@@ -64,11 +72,31 @@ class Anton_OT_ForceUpdater(bpy.types.Operator):
             return{'CANCELLED'}
 
 class Anton_OT_Initializer(bpy.types.Operator):
+    """Exports the mesh as .stl and imports it back so that each face is a triangle and their indices
+    match gmsh's convention.
+
+    :return: ``FINISHED`` if successful, ``CANCELLED`` otherwise
+    """
     bl_idname = 'anton.initialize'
     bl_label = 'Anton_Initializer'
     bl_description = 'Makes fixed materials and force vertex groups.'
 
     def execute(self, context):
+        """Models can be initialized either as `SHAPE` or `HULL`. In the case of `SHAPE`, the existing geometry
+        is used for design space definition whereas `HULL` defines a design space with the existing objects as obstacles and
+        a scaled convexhull as design space boundary.
+
+        :ivar bound_scale:
+        :vartype bound_scale: float
+        :ivar objects:
+        :vartype objects: list
+        :ivar points:
+        :vartype points: numpy.array
+        :ivar hull:
+        :vartype hull: numpy.array
+
+        :return: ``FINISHED`` if successful, ``CANCELLED`` otherwise
+        """
         scene = context.scene
         active_object = bpy.context.active_object
         bpy.context.space_data.shading.type = 'MATERIAL'

@@ -71,8 +71,13 @@ def ComputeGradientVecTr(q,me):
 
 def ElemStiffElasMatBa3DP1Vec(nme,q,me,volumes,la,mu):
     """
-    Computes all the element elastic stiffness  matrices :math:`\mathbb{K}^e(T_k)` for :math:`k\in\{0,\hdots,\nme-1\}`
-    in local *alternate* basis.
+    A function from pyOptFEM, developed at (C) University Paris XIII, Galilee Institute, LAGA, France. 
+    pyOptFEM is a python software package for P_1-Lagrange Finite Element Methods in 3D. The project
+    maintained by **F. Cuvelier**, **C. Japhet** and **G. Scarella**. 
+
+    For Online Documentation and Download we refer to http://www.math.univ-paris13.fr/~cuvelier
+
+    Computes all the element elastic stiffness  matrices.
 
     :param nme: number of mesh elements,
     :type nme: int
@@ -86,7 +91,7 @@ def ElemStiffElasMatBa3DP1Vec(nme,q,me,volumes,la,mu):
     :type la: float
     :param mu: the  :math:`\\mu` Lame parameter.
     :type mu: float
-    :returns: a ``(144*nme,)`` *numpy* array of floats.
+    :returns: a ``(nme, 144)`` *numpy* array of floats.
     """
     ndf2=144;
     G=ComputeGradientVecTr(q,me)
@@ -297,6 +302,11 @@ def ElemStiffElasMatBa3DP1Vec(nme,q,me,volumes,la,mu):
 ##################################################
 
 class Anton_OT_Processor(bpy.types.Operator):
+    """Solves the optimization problem defined by ``nodes``, ``elements``, ``fixed``,
+    ``no_design_nodes``, ``youngs``, ``poisson``.
+
+    :return: ``FINISHED`` if successful, ``CANCELLED`` otherwise
+    """
     bl_idname = 'anton.process'
     bl_label = 'Anton_Processor'
     bl_description = 'Start Optimization'

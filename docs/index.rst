@@ -17,8 +17,8 @@ anton is a generative design framework built on Blender, the open-source 3D crea
 
    introduction
    installation
-   interface
-   anton
+   quickstart
+   scripts
    release
    license
 

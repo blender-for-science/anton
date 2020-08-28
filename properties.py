@@ -2,6 +2,11 @@ import bpy
 from bpy.props import StringProperty, IntProperty, FloatProperty, EnumProperty, BoolProperty
 
 class ForcePropertyGroup(bpy.types.PropertyGroup):
+        """A class that holds magnitude of each applied force.
+
+        :ivar magnitude:
+        :vartype magnitude: float
+        """
 
         magnitude : FloatProperty(
                                 name="N",
@@ -12,23 +17,67 @@ class ForcePropertyGroup(bpy.types.PropertyGroup):
 
 
 class AntonPropertyGroup(bpy.types.PropertyGroup):
-        """Base class for dynamically defined sets of properties that are acessed
-        from :class: `Anton_PT_Panel` and used by all the operator classes.
+        """A class for dynamically defined sets of properties that are acessed
+        from **Anton_PT_Panel** and used by all the operator classes.
 
-        Attributes:
-                initialized (BoolProperty): A boolean property to check if the problem has been initialzed.
-                forced (BoolProperty): A boolean property to check if all the forces acting on the model has been defined.
-                force_directioned (BoolProperty): A boolean property to check if directions for all the specified forces has been defined.
-                defined (BoolProperty): A boolean property to check if the problem has been defined.
-                filename (StringProperty): A string property that stores the active object's name.
+        :ivar initialized:
+        :vartype initialized: bool
+        :ivar forced:
+        :vartype forced: bool
+        :ivar force_directioned:
+        :vartype force_directioned: bool
+        :ivar defined:
+        :vartype defined: bool
 
-                workspace_path (StringProperty): A string property that points at the workspace path
-                        in which temporary variables are created/stored. Defaults to /tmp/
-                mode (EnumProperty): A enum property that defines the design space. Choose `Shape` to use existing geometry as is 
-                        for the design space definition or choose `HULL` to form a geometry around the existing objects. Existing objects are considered
-                        as obstacles and are not included in the design space definition. Defaults to `Shape`.
-                
-                number_of_forces (IntProperty): An integer property that defines the number of forces acting on the model.
+        :ivar filename:
+        :vartype filename: str
+        :ivar workspace_path:
+        :vartype workspace_path: str
+        :ivar mode:
+        :vartype mode: enum
+        :ivar number_of_forces:
+        :vartype number_of_forces: int
+
+        :ivar include_fixed:
+        :vartype include_fixed: bool
+        :ivar include_forced:
+        :vartype include_forced: bool
+        :ivar density_filter:
+        :vartype density_filter: bool
+        :ivar sensitivity_filter:
+        :vartype sensitivity_filter: bool
+
+        :ivar cl_max:
+        :vartype cl_max: float
+        :ivar rmin:
+        :vartype rmin: float
+        :ivar density_change:
+        :vartype density_change: float
+        :ivar emin:
+        :vartype emin: float
+
+        :ivar metaballrad:
+        :vartype metaballrad: float
+        :ivar metaballsens:
+        :vartype metaballsens: float
+        :ivar volumina_ratio:
+        :vartype volumina_ratio: float
+        :ivar penalty_exponent:
+        :vartype penalty_exponent: float                        
+
+        :ivar number_of_iterations:
+        :vartype number_of_iterations: int
+        :ivar viz_iteration:
+        :vartype viz_iteration: int
+        :ivar keyframes:
+        :vartype keyframes: int
+        :ivar slices:
+        :vartype slices: int
+        :ivar number_of_neighbours:
+        :vartype number_of_neighbours: int                                
+
+        :ivar material:
+        :vartype material: enum        
         """
 
         initialized : BoolProperty(default=False)

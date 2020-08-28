@@ -1,0 +1,398 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scripts &#8212; anton  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Releases" href="release.html" />
+    <link rel="prev" title="Quickstart" href="quickstart.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="scripts">
+<h1>Scripts<a class="headerlink" href="#scripts" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-properties">
+<span id="properties"></span><h2>Properties<a class="headerlink" href="#module-properties" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="properties.AntonPropertyGroup">
+<em class="property">class </em><code class="sig-prename descclassname">properties.</code><code class="sig-name descname">AntonPropertyGroup</code><a class="headerlink" href="#properties.AntonPropertyGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">bpy.types.PropertyGroup</span></code></p>
+<p>A class for dynamically defined sets of properties that are acessed
+from <strong>Anton_PT_Panel</strong> and used by all the operator classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initialized</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>forced</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>force_directioned</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>defined</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – </p></li>
+<li><p><strong>workspace_path</strong> (<em>str</em>) – </p></li>
+<li><p><strong>mode</strong> (<em>enum</em>) – </p></li>
+<li><p><strong>number_of_forces</strong> (<em>int</em>) – </p></li>
+<li><p><strong>include_fixed</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>include_forced</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>density_filter</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>sensitivity_filter</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>cl_max</strong> (<em>float</em>) – </p></li>
+<li><p><strong>rmin</strong> (<em>float</em>) – </p></li>
+<li><p><strong>density_change</strong> (<em>float</em>) – </p></li>
+<li><p><strong>emin</strong> (<em>float</em>) – </p></li>
+<li><p><strong>metaballrad</strong> (<em>float</em>) – </p></li>
+<li><p><strong>metaballsens</strong> (<em>float</em>) – </p></li>
+<li><p><strong>volumina_ratio</strong> (<em>float</em>) – </p></li>
+<li><p><strong>penalty_exponent</strong> (<em>float</em>) – </p></li>
+<li><p><strong>number_of_iterations</strong> (<em>int</em>) – </p></li>
+<li><p><strong>viz_iteration</strong> (<em>int</em>) – </p></li>
+<li><p><strong>keyframes</strong> (<em>int</em>) – </p></li>
+<li><p><strong>slices</strong> (<em>int</em>) – </p></li>
+<li><p><strong>number_of_neighbours</strong> (<em>int</em>) – </p></li>
+<li><p><strong>material</strong> (<em>enum</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="properties.ForcePropertyGroup">
+<em class="property">class </em><code class="sig-prename descclassname">properties.</code><code class="sig-name descname">ForcePropertyGroup</code><a class="headerlink" href="#properties.ForcePropertyGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">bpy.types.PropertyGroup</span></code></p>
+<p>A class that holds magnitude of each applied force.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><strong>magnitude</strong> (<em>float</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-initializer">
+<span id="initializer"></span><h2>Initializer<a class="headerlink" href="#module-initializer" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="initializer.Anton_OT_ForceUpdater">
+<em class="property">class </em><code class="sig-prename descclassname">initializer.</code><code class="sig-name descname">Anton_OT_ForceUpdater</code><a class="headerlink" href="#initializer.Anton_OT_ForceUpdater" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">bpy.types.Operator</span></code></p>
+<p>Adds materials and vertex groups corresponding to the number
+of forces acting on the model.</p>
+<dl class="py method">
+<dt id="initializer.Anton_OT_ForceUpdater.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context</span></em><span class="sig-paren">)</span><a class="headerlink" href="#initializer.Anton_OT_ForceUpdater.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds <code class="docutils literal notranslate"><span class="pre">NATIVE</span></code>, <code class="docutils literal notranslate"><span class="pre">FIXED</span></code>, <code class="docutils literal notranslate"><span class="pre">NODESIGNSPACE</span></code> and <code class="docutils literal notranslate"><span class="pre">FORCE_{}</span></code> materials and
+vertex groups <code class="docutils literal notranslate"><span class="pre">DIRECTION_{}</span></code> to the active object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">FINISHED</span></code> if successful, <code class="docutils literal notranslate"><span class="pre">CANCELLED</span></code> otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="initializer.Anton_OT_Initializer">
+<em class="property">class </em><code class="sig-prename descclassname">initializer.</code><code class="sig-name descname">Anton_OT_Initializer</code><a class="headerlink" href="#initializer.Anton_OT_Initializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">bpy.types.Operator</span></code></p>
+<p>Exports the mesh as .stl and imports it back so that each face is a triangle and their indices
+match gmsh’s convention.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">FINISHED</span></code> if successful, <code class="docutils literal notranslate"><span class="pre">CANCELLED</span></code> otherwise</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="initializer.Anton_OT_Initializer.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context</span></em><span class="sig-paren">)</span><a class="headerlink" href="#initializer.Anton_OT_Initializer.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Models can be initialized either as <cite>SHAPE</cite> or <cite>HULL</cite>. In the case of <cite>SHAPE</cite>, the existing geometry
+is used for design space definition whereas <cite>HULL</cite> defines a design space with the existing objects as obstacles and
+a scaled convexhull as design space boundary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bound_scale</strong> (<em>float</em>) – </p></li>
+<li><p><strong>objects</strong> (<em>list</em>) – </p></li>
+<li><p><strong>points</strong> (<em>numpy.array</em>) – </p></li>
+<li><p><strong>hull</strong> (<em>numpy.array</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">FINISHED</span></code> if successful, <code class="docutils literal notranslate"><span class="pre">CANCELLED</span></code> otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-definer">
+<span id="definer"></span><h2>Definer<a class="headerlink" href="#module-definer" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="definer.Anton_OT_Definer">
+<em class="property">class </em><code class="sig-prename descclassname">definer.</code><code class="sig-name descname">Anton_OT_Definer</code><a class="headerlink" href="#definer.Anton_OT_Definer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">bpy.types.Operator</span></code></p>
+<p>An operator class that creates a tetrahedral finite element mesh of the model with <strong>gmsh_api</strong>,
+interprets the forces acting on the model and stores the required variables as a numpy binary file (.npy).</p>
+<dl class="py method">
+<dt id="definer.Anton_OT_Definer.create_geo">
+<code class="sig-name descname">create_geo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">fixed_faces</span></em>, <em class="sig-param"><span class="n">no_design_faces</span></em>, <em class="sig-param"><span class="n">forced_faces</span></em>, <em class="sig-param"><span class="n">forced_magnitudes</span></em>, <em class="sig-param"><span class="n">forced_directions</span></em>, <em class="sig-param"><span class="n">forced_direction_signs</span></em>, <em class="sig-param"><span class="n">geo_points</span></em>, <em class="sig-param"><span class="n">geo_edges</span></em>, <em class="sig-param"><span class="n">points</span></em>, <em class="sig-param"><span class="n">edges</span></em>, <em class="sig-param"><span class="n">curve_loop</span></em>, <em class="sig-param"><span class="n">clmax</span></em><span class="sig-paren">)</span><a class="headerlink" href="#definer.Anton_OT_Definer.create_geo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a tetrahedral finite element mesh of the model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – </p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – </p></li>
+<li><p><strong>fixed_faces</strong> (<em>set</em>) – </p></li>
+<li><p><strong>no_design_faces</strong> (<em>set</em>) – </p></li>
+<li><p><strong>forced_faces</strong> (<em>OrderedDict</em>) – </p></li>
+<li><p><strong>forced_magnitudes</strong> (<em>OrderedDict</em>) – </p></li>
+<li><p><strong>forced_directions</strong> (<em>OrderedDict</em>) – </p></li>
+<li><p><strong>forced_direction_signs</strong> (<em>OrderedDict</em>) – </p></li>
+<li><p><strong>points</strong> (<em>OrderedDict</em>) – </p></li>
+<li><p><strong>edges</strong> (<em>OrderedDict</em>) – </p></li>
+<li><p><strong>curve_loop</strong> (<em>OrderedDict</em>) – </p></li>
+<li><p><strong>geo_points</strong> (<em>OrderedDict</em>) – </p></li>
+<li><p><strong>geo_edges</strong> (<em>OrderedDict</em>) – </p></li>
+<li><p><strong>clmax</strong> (<em>float</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>nodes, elements, fixed_nodes, no_design_nodes, forced_nodes, directions, distributed_force</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="definer.Anton_OT_Definer.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context</span></em><span class="sig-paren">)</span><a class="headerlink" href="#definer.Anton_OT_Definer.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterates through all the faces of the model and creates sets of face indices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nodes</strong> (<em>numpy.array</em>) – </p></li>
+<li><p><strong>elements</strong> (<em>numpy.array</em>) – </p></li>
+<li><p><strong>fixed_nodes</strong> (<em>numpy.array</em>) – </p></li>
+<li><p><strong>no_design_nodes</strong> (<em>numpy.array</em>) – </p></li>
+<li><p><strong>forced_nodes</strong> (<em>numpy.array</em>) – </p></li>
+<li><p><strong>directions</strong> (<em>OrderedDict</em>) – </p></li>
+<li><p><strong>distributed_force</strong> (<em>OrderedDict</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">FINISHED</span></code> if successful, <code class="docutils literal notranslate"><span class="pre">CANCELLED</span></code> otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="definer.Anton_OT_DirectionUpdater">
+<em class="property">class </em><code class="sig-prename descclassname">definer.</code><code class="sig-name descname">Anton_OT_DirectionUpdater</code><a class="headerlink" href="#definer.Anton_OT_DirectionUpdater" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">bpy.types.Operator</span></code></p>
+<p>Visualizes direction vector of applied force with grease pencil</p>
+<dl class="py method">
+<dt id="definer.Anton_OT_DirectionUpdater.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context</span></em><span class="sig-paren">)</span><a class="headerlink" href="#definer.Anton_OT_DirectionUpdater.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instantiates an arrow at the centroid of a face on which force is applied. The instantiated arrow is
+a grease pencil object whose color corresponds to the applied force.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">FINISHED</span></code> if successful, <code class="docutils literal notranslate"><span class="pre">CANCELLED</span></code> otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-processor">
+<span id="processor"></span><h2>Processor<a class="headerlink" href="#module-processor" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="processor.Anton_OT_Processor">
+<em class="property">class </em><code class="sig-prename descclassname">processor.</code><code class="sig-name descname">Anton_OT_Processor</code><a class="headerlink" href="#processor.Anton_OT_Processor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">bpy.types.Operator</span></code></p>
+<p>Solves the optimization problem defined by <code class="docutils literal notranslate"><span class="pre">nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">elements</span></code>, <code class="docutils literal notranslate"><span class="pre">fixed</span></code>,
+<code class="docutils literal notranslate"><span class="pre">no_design_nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">youngs</span></code>, <code class="docutils literal notranslate"><span class="pre">poisson</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">FINISHED</span></code> if successful, <code class="docutils literal notranslate"><span class="pre">CANCELLED</span></code> otherwise</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="processor.Anton_OT_Processor.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context</span></em><span class="sig-paren">)</span><a class="headerlink" href="#processor.Anton_OT_Processor.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the operator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>context</strong> (<em>'Context'</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>typing.Union[typing.Set[str], typing.Set[int]]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>result * RUNNING_MODAL Running Modal, Keep the operator running with blender. * CANCELLED Cancelled, The operator exited without doing anything, so no undo entry should be pushed. * FINISHED Finished, The operator exited after completing its action. * PASS_THROUGH Pass Through, Do nothing and pass the event on. * INTERFACE Interface, Handled but not executed (popup menus).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="processor.ElemStiffElasMatBa3DP1Vec">
+<code class="sig-prename descclassname">processor.</code><code class="sig-name descname">ElemStiffElasMatBa3DP1Vec</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nme</span></em>, <em class="sig-param"><span class="n">q</span></em>, <em class="sig-param"><span class="n">me</span></em>, <em class="sig-param"><span class="n">volumes</span></em>, <em class="sig-param"><span class="n">la</span></em>, <em class="sig-param"><span class="n">mu</span></em><span class="sig-paren">)</span><a class="headerlink" href="#processor.ElemStiffElasMatBa3DP1Vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function from pyOptFEM, developed at (C) University Paris XIII, Galilee Institute, LAGA, France. 
+pyOptFEM is a python software package for P_1-Lagrange Finite Element Methods in 3D. The project
+maintained by <strong>F. Cuvelier</strong>, <strong>C. Japhet</strong> and <strong>G. Scarella</strong>.</p>
+<p>For Online Documentation and Download we refer to <a class="reference external" href="http://www.math.univ-paris13.fr/~cuvelier">http://www.math.univ-paris13.fr/~cuvelier</a></p>
+<p>Computes all the element elastic stiffness  matrices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nme</strong> (<em>int</em>) – number of mesh elements,</p></li>
+<li><p><strong>q</strong> (<code class="docutils literal notranslate"><span class="pre">(3,nq)</span></code> <em>numpy</em> array of floats) – mesh vertices,</p></li>
+<li><p><strong>me</strong> (<code class="docutils literal notranslate"><span class="pre">(4,nme)</span></code> <em>numpy</em> array of integers) – mesh connectivity,</p></li>
+<li><p><strong>volumes</strong> (<code class="docutils literal notranslate"><span class="pre">(nme,)</span></code> <em>numpy</em> array of floats) – volumes of all the mesh elements.</p></li>
+<li><p><strong>la</strong> (<em>float</em>) – the  <span class="math notranslate nohighlight">\(\lambda\)</span> Lame parameter,</p></li>
+<li><p><strong>mu</strong> (<em>float</em>) – the  <span class="math notranslate nohighlight">\(\mu\)</span> Lame parameter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a <code class="docutils literal notranslate"><span class="pre">(nme,</span> <span class="pre">144)</span></code> <em>numpy</em> array of floats.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-visualizer">
+<span id="visualizer"></span><h2>Visualizer<a class="headerlink" href="#module-visualizer" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="visualizer.Anton_OT_Visualizer">
+<em class="property">class </em><code class="sig-prename descclassname">visualizer.</code><code class="sig-name descname">Anton_OT_Visualizer</code><a class="headerlink" href="#visualizer.Anton_OT_Visualizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">bpy.types.Operator</span></code></p>
+<dl class="py method">
+<dt id="visualizer.Anton_OT_Visualizer.execute">
+<code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context</span></em><span class="sig-paren">)</span><a class="headerlink" href="#visualizer.Anton_OT_Visualizer.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the operator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>context</strong> (<em>'Context'</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>typing.Union[typing.Set[str], typing.Set[int]]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>result * RUNNING_MODAL Running Modal, Keep the operator running with blender. * CANCELLED Cancelled, The operator exited without doing anything, so no undo entry should be pushed. * FINISHED Finished, The operator exited after completing its action. * PASS_THROUGH Pass Through, Do nothing and pass the event on. * INTERFACE Interface, Handled but not executed (popup menus).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">anton</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-properties">Properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-initializer">Initializer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-definer">Definer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-processor">Processor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-visualizer">Visualizer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="quickstart.html" title="previous chapter">Quickstart</a></li>
+      <li>Next: <a href="release.html" title="next chapter">Releases</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Senthur Raj.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/scripts.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
