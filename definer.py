@@ -76,8 +76,6 @@ def draw_arrow(gp_frame, p: tuple, norm: tuple, d: tuple, size: int, reverse: bo
     return gp_stroke
 
 class Anton_OT_DirectionUpdater(bpy.types.Operator):
-    """Visualizes direction vector of applied force with grease pencil
-    """
     bl_idname = "anton.directionupdate"
     bl_label = ""
 
@@ -86,7 +84,7 @@ class Anton_OT_DirectionUpdater(bpy.types.Operator):
 
     def execute(self, context):
         """Instantiates an arrow at the centroid of a face on which force is applied. The instantiated arrow is
-        a grease pencil object whose color corresponds to the applied force.
+        a grease pencil object whose color corresponds to the applied force. Arrow head flips when direction sign is changed.
 
         :return: ``FINISHED`` if successful, ``CANCELLED`` otherwise
         """
@@ -177,32 +175,32 @@ class Anton_OT_DirectionUpdater(bpy.types.Operator):
             return{'CANCELLED'}
 
 class Anton_OT_Definer(bpy.types.Operator):
-    """An operator class that creates a tetrahedral finite element mesh of the model with **gmsh_api**,
-    interprets the forces acting on the model and stores the required variables as a numpy binary file (.npy).
-    """
     bl_idname = 'anton.define'
     bl_label = 'Anton_Definer'
     bl_description = 'Defines the problem.'
 
     def execute(self, context):
-        """Iterates through all the faces of the model and creates sets of face indices.
+        """Defines the problem after creation of a tetrahedral finite element mesh and stores
+        the mesh variables as a binary numpy file which is accessed by ``Anton_OT_Processor``
 
-        :ivar nodes:
-        :vartype nodes: numpy.array
-        :ivar elements:
-        :vartype elements: numpy.array
-        :ivar fixed_nodes:
-        :vartype fixed_nodes: numpy.array
-        :ivar no_design_nodes:
-        :vartype no_design_nodes: numpy.array
-        :ivar forced_nodes:
-        :vartype forced_nodes: numpy.array
-        :ivar directions:
-        :vartype directions: OrderedDict
-        :ivar distributed_force:
-        :vartype distributed_force: OrderedDict
+        :ivar nodes: Cartesian position of nodes
+        :vartype nodes: *numpy.array* of ``float``
+        :ivar elements: Connectivity array of nodes
+        :vartype elements: *numpy.array* of ``int``
+        :ivar fixed_nodes: Indices of fixed nodes
+        :vartype fixed_nodes: *numpy.array* of ``int``
+        :ivar no_design_nodes: Indices of non-design nodes
+        :vartype no_design_nodes: *numpy.array* of ``int``
+        :ivar forced_nodes: Indices of forced nodes
+        :vartype forced_nodes: *numpy.array* of ``int``
+        :ivar directions: Direction vector corresponding to each force
+        :vartype directions: ``dict``
+        :ivar distributed_force: Magnitude per area of each force
+        :vartype distributed_force: ``dict``
 
         :return: ``FINISHED`` if successful, ``CANCELLED`` otherwise
+
+        \\
         """
         scene = context.scene
         active_object = bpy.data.objects[scene.anton.filename]
@@ -374,43 +372,40 @@ class Anton_OT_Definer(bpy.types.Operator):
                     curve_loop,
                     clmax):
 
-        """Creates a tetrahedral finite element mesh of the model
+        """Creates a tetrahedral finite element mesh of the object with **gmsh_api**, adds physical groups for fixed, forced and non-design space faces
+        and retrieves direction of each applied force from assigned vertex groups. 
 
-        :param path:
-        :type path: str
-        :param filename:
-        :type filename: str
+        :param path: Workspace path
+        :type path: ``str``
+        :param filename: Name of the initialized object
+        :type filename: ``str``
 
-        :param fixed_faces:
-        :type fixed_faces: set
-        :param no_design_faces:
-        :type no_design_faces: set
-        :param forced_faces:
-        :type forced_faces: OrderedDict
-        :param forced_magnitudes:
-        :type forced_magnitudes: OrderedDict
+        :param fixed_faces: Indices of fixed faces
+        :type fixed_faces: ``set``
+        :param no_design_faces: Indices of non-design space faces
+        :type no_design_faces: ``set``
+        :param forced_faces: Indices of faces corresponding to each force
+        :type forced_faces: ``dict``
+        :param forced_magnitudes:  Magnitude of each force
+        :type forced_magnitudes: ``dict``
         
-        :param forced_directions:
-        :type forced_directions: OrderedDict
-        :param forced_direction_signs:
-        :type forced_direction_signs: OrderedDict
+        :param forced_directions: Direction of each force
+        :type forced_directions: ``dict``
+        :param forced_direction_signs: Direction sign of each force
+        :type forced_direction_signs: ``dict``
 
-        :param points:
-        :type points: OrderedDict
-        :param edges:
-        :type edges: OrderedDict
-        :param curve_loop:
-        :type curve_loop: OrderedDict
+        :param curve_loop: Connectivity of each triangle of the object
+        :type curve_loop: ``dict``
 
-        :param geo_points:
-        :type geo_points: OrderedDict
-        :param geo_edges:
-        :type geo_edges: OrderedDict
+        :param geo_points: Vertices of the object
+        :type geo_points: ``dict``
+        :param geo_edges: Edges of the object
+        :type geo_edges: ``dict``
 
-        :param clmax:
-        :type clmax: float
+        :param clmax: Maximum element size
+        :type clmax: ``float``
 
-        :return: nodes, elements, fixed_nodes, no_design_nodes, forced_nodes, directions, distributed_force 
+        :return: ``nodes``, ``elements``, ``fixed_nodes``, ``no_design_nodes``, ``forced_nodes``, ``directions``, ``distributed_force``
         """
 
         geo = gmsh.model.geo

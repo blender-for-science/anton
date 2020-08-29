@@ -9,6 +9,20 @@ class Anton_OT_Visualizer(bpy.types.Operator):
     bl_description = 'Visualize results.'
 
     def execute(self, context):
+        """Visualizes results with metaballs which are implicit surfaces, meaning that they are not explicitly defined 
+        by vertices. Metaballs are instantiated at the centroid of each element with a density value above the specified threshold.
+
+        :ivar density_out: Density threshold
+        :vartype density_out: ``float``
+        :ivar cdists: Distance to each element's centroid from origin
+        :vartype cdists: *numpy.array* of ``float``       
+        :ivar coms: Center of mass of each **slice**
+        :vartype coms: *numpy.array* of ``float``
+
+        :return: ``FINISHED`` if successful, ``CANCELLED`` otherwise
+
+        \\
+        """
         scene = context.scene
         density_out = 0.5
 

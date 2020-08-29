@@ -71,9 +71,9 @@ def ComputeGradientVecTr(q,me):
 
 def ElemStiffElasMatBa3DP1Vec(nme,q,me,volumes,la,mu):
     """
-    A function from pyOptFEM, developed at (C) University Paris XIII, Galilee Institute, LAGA, France. 
+    A function from pyOptFEM, developed at (C) University Paris XIII, Galilee Institute, LAGA, France.
     pyOptFEM is a python software package for P_1-Lagrange Finite Element Methods in 3D. The project
-    maintained by **F. Cuvelier**, **C. Japhet** and **G. Scarella**. 
+    maintained by **F. Cuvelier**, **C. Japhet** and **G. Scarella**.
 
     For Online Documentation and Download we refer to http://www.math.univ-paris13.fr/~cuvelier
 
@@ -302,11 +302,6 @@ def ElemStiffElasMatBa3DP1Vec(nme,q,me,volumes,la,mu):
 ##################################################
 
 class Anton_OT_Processor(bpy.types.Operator):
-    """Solves the optimization problem defined by ``nodes``, ``elements``, ``fixed``,
-    ``no_design_nodes``, ``youngs``, ``poisson``.
-
-    :return: ``FINISHED`` if successful, ``CANCELLED`` otherwise
-    """
     bl_idname = 'anton.process'
     bl_label = 'Anton_Processor'
     bl_description = 'Start Optimization'
@@ -423,6 +418,57 @@ class Anton_OT_Processor(bpy.types.Operator):
                         'Steel-EN-GJS-700-2': {'POISSON': 0.3, 'YOUNGS': 180000.0}}
 
     def execute(self, context):
+        """Solves the optimization problem defined by ``nodes``, ``elements``, ``fixed``, ``no_design_nodes``, ``youngs``, ``poisson``.
+        Loads the saved numpy variables and computes stiffness matrix with a pyOptFEM vectorized function,
+        solves for displacement and heads on to the optimization loop.
+
+        :ivar convergence: Convergence of sensitivity for optimization
+        :vartype convergence: ``float``
+
+        :ivar fixed_elements: Indices of fixed elements
+        :vartype fixed_elements: *numpy.array* of ``int``
+        :ivar forced_elements: Indices of forced elements
+        :vartype forced_elements: *numpy.array* of ``int``
+        :ivar no_design_set: Non-design space elements
+        :vartype no_design_set: *numpy.array* of ``int``
+
+        :ivar edofmat: Element DOF mapping
+        :vartype edofmat: *numpy.array* of ``int``
+
+        :ivar free: Indices of free nodes
+        :vartype free: *numpy.array* of ``int``
+        :ivar element_centers: Centroid of each element
+        :vartype element_centers: *numpy.array* of ``float``
+        :ivar structure: Neighbourhood of an element
+        :vartype structure: *numpy.array* of ``int``
+        :ivar distances: Distance to each neighbour
+        :vartype distances: *numpy.array* of ``float``
+        :ivar volumes: Volume of each element
+        :vartype volumes: *numpy.array* of ``float``
+
+        :ivar K: Global stiffness matrix
+        :vartype K: *numpy.array* of ``float``
+        :ivar F: Force vector
+        :vartype F: *numpy.array* of ``float``
+        :ivar displacement: Displacement vector
+        :vartype displacement: *numpy.array* of ``float``
+        :ivar Ue: Element displacement vector
+        :vartype Ue: *numpy.array* of ``float``
+
+        :ivar densities: Density of each element
+        :vartype densities: *numpy.array* of ``float``
+        :ivar sensitivity: Sensitivity of each element
+        :vartype sensitivity: *numpy.array* of ``float``
+
+        :ivar fdensities: Filtered density vector
+        :vartype fdensities: *numpy.array* of ``float``
+        :ivar fsensitivity: Filtered sensitivity vector
+        :vartype fsensitivity: *numpy.array* of ``float``
+
+        :return: ``FINISHED`` if successful, ``CANCELLED`` otherwise
+
+        \\
+        """
 
         scene = context.scene
         if scene.anton.defined:
@@ -558,14 +604,3 @@ class Anton_OT_Processor(bpy.types.Operator):
         else:
             self.report({'ERROR'}, '.inp file missing in {}'.format(scene.anton.workspace_path))
             return {'CANCELLED'}
-
-
-    @staticmethod
-    def compute_Dmat(v):
-        d_matrix = (1/((1+v)*(1-2*v))) * np.array([[1.0-v, v, v, 0.0, 0.0, 0.0],
-                                                    [v, 1.0-v, v, 0.0, 0.0, 0.0],
-                                                    [v, v, 1.0-v, 0.0, 0.0, 0.0],
-                                                    [0.0, 0.0, 0.0, 0.5-v, 0.0, 0.0],
-                                                    [0.0, 0.0, 0.0, 0.0, 0.5-v, 0.0],
-                                                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.5-v]])
-        return d_matrix
