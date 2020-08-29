@@ -1,10 +1,5 @@
 import bpy
 import os
-from scipy.sparse import csc_matrix
-from scipy.sparse.linalg import spsolve
-from sklearn.neighbors import KDTree
-
-from tqdm import tqdm
 import numpy as np
 
 #################################################
@@ -469,6 +464,12 @@ class Anton_OT_Processor(bpy.types.Operator):
 
         \\
         """
+
+        from scipy.sparse import csc_matrix
+        from scipy.sparse.linalg import spsolve
+        from sklearn.neighbors import KDTree
+
+        from tqdm import tqdm
 
         scene = context.scene
         if scene.anton.defined:

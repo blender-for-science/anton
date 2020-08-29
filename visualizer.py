@@ -1,6 +1,5 @@
 import bpy
 import numpy as np
-from tqdm import tqdm
 import os
 
 class Anton_OT_Visualizer(bpy.types.Operator):
@@ -23,6 +22,8 @@ class Anton_OT_Visualizer(bpy.types.Operator):
 
         \\
         """
+        from tqdm import tqdm
+        
         scene = context.scene
         density_out = 0.5
 
