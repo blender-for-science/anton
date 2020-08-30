@@ -51,7 +51,6 @@ uses implicit surfaces for mesh generation.
    installation
    quickstart
    scripts
-   release
    license
 
 
