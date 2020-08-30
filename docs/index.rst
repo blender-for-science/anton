@@ -17,6 +17,10 @@ Welcome to anton's documentation!
    :target: https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=blender-for-science/anton&amp;utm_campaign=Badge_Grade
    :alt: Codacy
 
+.. image:: https://img.shields.io/github/v/release/blender-for-science/anton
+   :target: https://github.com/blender-for-science/anton/releases
+   :alt: License
+
 .. image:: https://img.shields.io/github/license/blender-for-science/blendmsh
    :target: https://github.com/blender-for-science/anton/blob/master/LICENSE.md
    :alt: License
