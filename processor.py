@@ -413,7 +413,7 @@ class Anton_OT_Processor(bpy.types.Operator):
                         'Steel-EN-GJS-700-2': {'POISSON': 0.3, 'YOUNGS': 180000.0}}
 
     def execute(self, context):
-        """Solves the optimization problem defined by ``nodes``, ``elements``, ``fixed``, ``no_design_nodes``, ``youngs``, ``poisson``.
+        """Solves the optimization problem defined by ``nodes``, ``elements``, ``fixed``, ``non_design_nodes``, ``youngs``, ``poisson``.
         Loads the saved numpy variables and computes stiffness matrix with a pyOptFEM vectorized function,
         solves for displacement and heads on to the optimization loop.
 
@@ -424,8 +424,8 @@ class Anton_OT_Processor(bpy.types.Operator):
         :vartype fixed_elements: *numpy.array* of ``int``
         :ivar forced_elements: Indices of forced elements
         :vartype forced_elements: *numpy.array* of ``int``
-        :ivar no_design_set: Non-design space elements
-        :vartype no_design_set: *numpy.array* of ``int``
+        :ivar non_design_set: Non-design space elements
+        :vartype non_design_set: *numpy.array* of ``int``
 
         :ivar edofmat: Element DOF mapping
         :vartype edofmat: *numpy.array* of ``int``
@@ -476,11 +476,11 @@ class Anton_OT_Processor(bpy.types.Operator):
             nodes = np.load(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.nodes.npy'))
             elements = np.load(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.elements.npy'))
             fixed = np.load(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.fixed.npy'))
-            no_design_nodes = np.load(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.nds.npy'))
+            non_design_nodes = np.load(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.nds.npy'))
             youngs = self.material_library[scene.anton.material]['YOUNGS']
             poisson = self.material_library[scene.anton.material]['POISSON']
 
-            no_design_set = np.array([], dtype=np.int)
+            non_design_set = np.array([], dtype=np.int)
 
             penalty = scene.anton.penalty_exponent
             volumina = scene.anton.volumina_ratio
@@ -493,8 +493,8 @@ class Anton_OT_Processor(bpy.types.Operator):
             ndofs = 3*nq
             dofs = np.arange(ndofs)
 
-            for _node_id in no_design_nodes:
-                no_design_set = np.append(no_design_set, np.where(elements==_node_id)[0])
+            for _node_id in non_design_nodes:
+                non_design_set = np.append(non_design_set, np.where(elements==_node_id)[0])
 
             _temp_fixed = []
             fixed_elements = np.array([], dtype=np.int)
@@ -513,10 +513,10 @@ class Anton_OT_Processor(bpy.types.Operator):
                     F[_id + _dim] = _value
 
             if scene.anton.include_fixed:
-                no_design_set = np.append(no_design_set, fixed_elements)
+                non_design_set = np.append(non_design_set, fixed_elements)
 
             if scene.anton.include_forced:
-                no_design_set = np.append(no_design_set, forced_elements)
+                non_design_set = np.append(non_design_set, forced_elements)
 
             K = []
 
@@ -584,8 +584,8 @@ class Anton_OT_Processor(bpy.types.Operator):
                                                     )
                                         )))
 
-                    if len(no_design_set) > 0:
-                        step_densities[no_design_set] = 1.0
+                    if len(non_design_set) > 0:
+                        step_densities[non_design_set] = 1.0
 
                     if np.mean(step_densities) - volumina > 0:
                         min_sens = mid_sens

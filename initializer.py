@@ -41,8 +41,8 @@ class Anton_OT_ForceUpdater(bpy.types.Operator):
                 mat.diffuse_color = (1, 0, 0, 1)
                 active_object.data.materials.append(mat)
 
-            if 'NODESIGNSPACE' not in bpy.data.materials:
-                nds_mat = bpy.data.materials.new(name='NODESIGNSPACE')
+            if 'NONDESIGNSPACE' not in bpy.data.materials:
+                nds_mat = bpy.data.materials.new(name='NONDESIGNSPACE')
                 nds_mat.diffuse_color = (0, 0, 1, 1)
                 active_object.data.materials.append(nds_mat)
 
@@ -73,7 +73,7 @@ class Anton_OT_ForceUpdater(bpy.types.Operator):
 class Anton_OT_Initializer(bpy.types.Operator):
     bl_idname = 'anton.initialize'
     bl_label = 'Anton_Initializer'
-    bl_description = 'Makes fixed materials and force vertex groups.'
+    bl_description = 'Initializes design space'
 
     def execute(self, context):
         """Design space can be defined either via ``SHAPE`` or ``HULL`` mode. In case of ``SHAPE``, existing geometry
@@ -195,10 +195,8 @@ class Anton_OT_Initializer(bpy.types.Operator):
             active_object = bpy.context.active_object
 
             scene.anton.initialized = True
-            self.report({'INFO'}, 'Mode: {}, Material: {}'.format(
-                                                                scene.anton.mode,
-                                                                scene.anton.material))
+            self.report({'INFO'}, 'Mode: {}'.format(scene.anton.mode))
             return {'FINISHED'}
         else:
-            self.report({'ERROR'}, 'Problem has been defined. In order to re-initialize, kindly restart the process.')
+            self.report({'ERROR'}, 'Design space has already been initialized. In order to re-initialize, kindly restart the process.')
             return {'CANCELLED'}

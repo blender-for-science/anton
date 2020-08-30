@@ -78,6 +78,7 @@ def draw_arrow(gp_frame, p: tuple, norm: tuple, d: tuple, size: int, reverse: bo
 class Anton_OT_DirectionUpdater(bpy.types.Operator):
     bl_idname = "anton.directionupdate"
     bl_label = ""
+    bl_description = 'Changes direction sign'
 
     force_id : bpy.props.StringProperty()
     direction_reverse = OrderedDict()
@@ -177,7 +178,7 @@ class Anton_OT_DirectionUpdater(bpy.types.Operator):
 class Anton_OT_Definer(bpy.types.Operator):
     bl_idname = 'anton.define'
     bl_label = 'Anton_Definer'
-    bl_description = 'Defines the problem.'
+    bl_description = 'Defines the problem'
 
     def execute(self, context):
         """Defines the problem after creation of a tetrahedral finite element mesh and stores
@@ -189,8 +190,8 @@ class Anton_OT_Definer(bpy.types.Operator):
         :vartype elements: *numpy.array* of ``int``
         :ivar fixed_nodes: Indices of fixed nodes
         :vartype fixed_nodes: *numpy.array* of ``int``
-        :ivar no_design_nodes: Indices of non-design nodes
-        :vartype no_design_nodes: *numpy.array* of ``int``
+        :ivar non_design_nodes: Indices of non-design nodes
+        :vartype non_design_nodes: *numpy.array* of ``int``
         :ivar forced_nodes: Indices of forced nodes
         :vartype forced_nodes: *numpy.array* of ``int``
         :ivar directions: Direction vector corresponding to each force
@@ -206,7 +207,7 @@ class Anton_OT_Definer(bpy.types.Operator):
         active_object = bpy.data.objects[scene.anton.filename]
 
         fixed_faces = set()
-        no_design_faces = set()
+        non_design_faces = set()
         forced_faces = OrderedDict()
         forced_directions = OrderedDict()
 
@@ -217,8 +218,8 @@ class Anton_OT_Definer(bpy.types.Operator):
                     # Adding 1 because of gmsh_api convention
                     fixed_faces.add(face.index + 1)
 
-                elif 'NODESIGNSPACE' in active_object.data.materials[face.material_index].name_full:
-                    no_design_faces.add(face.index + 1)
+                elif 'NONDESIGNSPACE' in active_object.data.materials[face.material_index].name_full:
+                    non_design_faces.add(face.index + 1)
 
                 elif 'FORCE' in active_object.data.materials[face.material_index].name_full:
                     force_id = str(active_object.data.materials[face.material_index].name_full)
@@ -246,9 +247,9 @@ class Anton_OT_Definer(bpy.types.Operator):
                 bpy.ops.object.mode_set(mode='EDIT')
 
             bpy.ops.object.mode_set(mode='OBJECT')
-            self.report({'INFO'}, 'Fixed: {}, No Design Space: {}, Force: {}'.format(
+            self.report({'INFO'}, 'Fixed: {}, Non Design Space: {}, Force: {}'.format(
                                                                                 fixed_faces,
-                                                                                no_design_faces,
+                                                                                non_design_faces,
                                                                                 list(forced_faces.keys())))
 
 
@@ -292,11 +293,11 @@ class Anton_OT_Definer(bpy.types.Operator):
             gmsh.initialize()
             gmsh.option.setNumber('General.Terminal', 1)
 
-            nodes, elements, fixed_nodes, no_design_nodes, forced_nodes, directions, distributed_force = self.create_geo(
+            nodes, elements, fixed_nodes, non_design_nodes, forced_nodes, directions, distributed_force = self.create_geo(
                                                             scene.anton.workspace_path,
                                                             scene.anton.filename,
                                                             fixed_faces,
-                                                            no_design_faces,
+                                                            non_design_faces,
                                                             forced_faces,
                                                             scene.forced_magnitudes,
                                                             forced_directions,
@@ -342,7 +343,7 @@ class Anton_OT_Definer(bpy.types.Operator):
                         np.array(list(fixed_nodes), dtype=np.int))
 
             np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.nds'),
-                        np.array(list(no_design_nodes), dtype=np.int))
+                        np.array(list(non_design_nodes), dtype=np.int))
 
             gmsh.finalize()
 
@@ -360,7 +361,7 @@ class Anton_OT_Definer(bpy.types.Operator):
                     path,
                     filename,
                     fixed_faces,
-                    no_design_faces,
+                    non_design_faces,
                     forced_faces,
                     forced_magnitudes,
                     forced_directions,
@@ -382,8 +383,8 @@ class Anton_OT_Definer(bpy.types.Operator):
 
         :param fixed_faces: Indices of fixed faces
         :type fixed_faces: ``set``
-        :param no_design_faces: Indices of non-design space faces
-        :type no_design_faces: ``set``
+        :param non_design_faces: Indices of non-design space faces
+        :type non_design_faces: ``set``
         :param forced_faces: Indices of faces corresponding to each force
         :type forced_faces: ``dict``
         :param forced_magnitudes:  Magnitude of each force
@@ -405,7 +406,7 @@ class Anton_OT_Definer(bpy.types.Operator):
         :param clmax: Maximum element size
         :type clmax: ``float``
 
-        :return: ``nodes``, ``elements``, ``fixed_nodes``, ``no_design_nodes``, ``forced_nodes``, ``directions``, ``distributed_force``
+        :return: ``nodes``, ``elements``, ``fixed_nodes``, ``non_design_nodes``, ``forced_nodes``, ``directions``, ``distributed_force``
         """
 
         geo = gmsh.model.geo
@@ -445,7 +446,7 @@ class Anton_OT_Definer(bpy.types.Operator):
             if _curve_id in fixed_faces:
                 gmsh.model.addPhysicalGroup(2, [surf_temp], _curve_id)
 
-            elif _curve_id in no_design_faces:
+            elif _curve_id in non_design_faces:
                 gmsh.model.addPhysicalGroup(2, [surf_temp], _curve_id)
 
             elif _curve_id in all_forced_faces:
@@ -482,7 +483,7 @@ class Anton_OT_Definer(bpy.types.Operator):
         gmsh.model.mesh.generate(3)
 
         fixed_nodes = set()
-        no_design_nodes = set()
+        non_design_nodes = set()
         forced_nodes = OrderedDict()
 
         nodes = np.array(gmsh.model.mesh.getNodes()[1]).reshape(len(gmsh.model.mesh.getNodes()[0]), 3)
@@ -492,9 +493,9 @@ class Anton_OT_Definer(bpy.types.Operator):
             for _fixed_node_id in gmsh.model.mesh.getNodesForPhysicalGroup(2, _face_id)[0]:
                 fixed_nodes.add(_fixed_node_id - 1)
 
-        for _face_id in no_design_faces:
-            for _no_design_node_id in gmsh.model.mesh.getNodesForPhysicalGroup(2, _face_id)[0]:
-                no_design_nodes.add(_no_design_node_id - 1)
+        for _face_id in non_design_faces:
+            for _non_design_node_id in gmsh.model.mesh.getNodesForPhysicalGroup(2, _face_id)[0]:
+                non_design_nodes.add(_non_design_node_id - 1)
 
         for _force_id in forced_faces.keys():
             forced_nodes[_force_id] = []
@@ -505,7 +506,7 @@ class Anton_OT_Definer(bpy.types.Operator):
                     forced_nodes[_force_id][-1].append(int(_forced_node_id - 1))
 
         gmsh.write(os.path.join(path, filename+'.msh'))
-        return nodes, elements, fixed_nodes, no_design_nodes, forced_nodes, directions, distributed_force
+        return nodes, elements, fixed_nodes, non_design_nodes, forced_nodes, directions, distributed_force
 
     @staticmethod
     def get_curve_loop(surf):
