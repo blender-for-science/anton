@@ -9,14 +9,16 @@ Initialize
     :align: right
 
 * Design space can be initialized via two modes.
-* ``SHAPE`` defines existing geometry as design space.
+* ``SHAPE`` defines existing geometry (can be imported as well) as design space.
 * ``HULL`` forms a convexhull excluding existing objects.
 * Design space is then saved as a ``.stl`` file under the specified ``workspace_path``
 
-\
+|
 
 .. image:: ./initialize.gif
    :alt: Initialize
+
+|
 
 Define
 ------
@@ -27,14 +29,15 @@ Define
 * Specify the ``number of forces`` acting on the object.
 * Assign ``materials`` to face(s) corresponding to each force, fixed and non-design space.
 * Assign ``vertex groups`` to edges that depict the direction of each corresponding force.
-* Input the ``magnitude`` and click the ``Expand`` button to visualize each one of the applied forces.
+* Input the ``magnitude`` and click the ``Expand`` button to visualize and change direction of each applied force.
 * Specify the ``maximum element size`` for tetrahedral finite element mesh generation and click ``Define``
 
-
-\
+|
 
 .. image:: ./define.gif
    :alt: Define
+
+|
 
 Generate
 --------
@@ -58,6 +61,8 @@ Generate
 * For a conceptual understanding of these parameters, read `Material interpolation schemes in topology optimization. <https://www.researchgate.net/publication/225613840_Material_interpolation_schemes_in_topology_optimization>`_
 * Input the ``number of iterations`` and click ``Generate``
 
+|
+
 Visualize
 ---------
 
@@ -71,7 +76,9 @@ Visualize
 * The generated metaball object can then be converted into a mesh via ``Object`` -> ``Covert to`` -> ``Mesh from Curve/Meta/Surf/Text``
 * A ``Smooth Corrective`` modifier can then be applied on the mesh during export.
 
-\
+|
 
 .. image:: ./visualize.gif
    :alt: Visualize
+
+|
