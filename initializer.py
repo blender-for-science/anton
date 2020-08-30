@@ -21,6 +21,13 @@ class Anton_OT_ForceUpdater(bpy.types.Operator):
                         (255/255, 139/255, 0/255, 1)]
 
     def execute(self, context):
+        """Adds ``NATIVE``, ``FIXED``, ``NODESIGNSPACE`` and ``FORCE_{}`` materials and
+        vertex groups ``DIRECTION_{}`` to the active object to facilitate problem definition.
+
+        :return: ``FINISHED`` if successful, ``CANCELLED`` otherwise
+
+        \\
+        """
         scene = context.scene
         active_object = bpy.context.active_object
 
@@ -42,7 +49,7 @@ class Anton_OT_ForceUpdater(bpy.types.Operator):
             for i in range(scene.anton.number_of_forces):
                 if str('FORCE_{}'.format(i+1)) not in bpy.data.materials:
 
-                    #TAKE CARE OF POPPING EXCESS FORCES
+                    # Take care of popping of excess forces
                     size = len(scene.forceprop)
                     new = scene.forceprop.add()
                     new.name = str(size+1)
@@ -69,6 +76,19 @@ class Anton_OT_Initializer(bpy.types.Operator):
     bl_description = 'Makes fixed materials and force vertex groups.'
 
     def execute(self, context):
+        """Design space can be defined either via ``SHAPE`` or ``HULL`` mode. In case of ``SHAPE``, existing geometry
+        is used for design space definition whereas ``HULL`` mode defines a design space with the existing objects as obstacles and
+        a scaled convexhull as design space boundary.
+
+        :ivar objects: List of all the obstacle objects
+        :vartype objects: ``list``
+        :ivar points: Bounding points of all the obstacles
+        :vartype points: numpy array of ``floats``
+        :ivar hull: Convexhull of the bounding points
+        :vartype hull: numpy array of ``floats``
+
+        :return: ``FINISHED`` if successful, ``CANCELLED`` otherwise
+        """
         scene = context.scene
         active_object = bpy.context.active_object
         bpy.context.space_data.shading.type = 'MATERIAL'

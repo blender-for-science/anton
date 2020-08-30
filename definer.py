@@ -83,6 +83,11 @@ class Anton_OT_DirectionUpdater(bpy.types.Operator):
     direction_reverse = OrderedDict()
 
     def execute(self, context):
+        """Instantiates an arrow at the centroid of a face on which force is applied. The instantiated arrow is
+        a grease pencil object whose color corresponds to the applied force. Arrow head flips when direction sign is changed.
+
+        :return: ``FINISHED`` if successful, ``CANCELLED`` otherwise
+        """
         scene = context.scene
         active_object = bpy.data.objects[scene.anton.filename]
         direction = np.array([0.0, 0.0, 0.0])
@@ -175,6 +180,28 @@ class Anton_OT_Definer(bpy.types.Operator):
     bl_description = 'Defines the problem.'
 
     def execute(self, context):
+        """Defines the problem after creation of a tetrahedral finite element mesh and stores
+        the mesh variables as a binary numpy file which is accessed by ``Anton_OT_Processor``
+
+        :ivar nodes: Cartesian position of nodes
+        :vartype nodes: *numpy.array* of ``float``
+        :ivar elements: Connectivity array of nodes
+        :vartype elements: *numpy.array* of ``int``
+        :ivar fixed_nodes: Indices of fixed nodes
+        :vartype fixed_nodes: *numpy.array* of ``int``
+        :ivar no_design_nodes: Indices of non-design nodes
+        :vartype no_design_nodes: *numpy.array* of ``int``
+        :ivar forced_nodes: Indices of forced nodes
+        :vartype forced_nodes: *numpy.array* of ``int``
+        :ivar directions: Direction vector corresponding to each force
+        :vartype directions: ``dict``
+        :ivar distributed_force: Magnitude per area of each force
+        :vartype distributed_force: ``dict``
+
+        :return: ``FINISHED`` if successful, ``CANCELLED`` otherwise
+
+        \\
+        """
         scene = context.scene
         active_object = bpy.data.objects[scene.anton.filename]
 
@@ -187,7 +214,7 @@ class Anton_OT_Definer(bpy.types.Operator):
             bpy.ops.object.mode_set(mode='OBJECT')
             for face in active_object.data.polygons:
                 if 'FIXED' in active_object.data.materials[face.material_index].name_full:
-                    # ADDING 1 COZ OF GMSH INDEX
+                    # Adding 1 because of gmsh_api convention
                     fixed_faces.add(face.index + 1)
 
                 elif 'NODESIGNSPACE' in active_object.data.materials[face.material_index].name_full:
@@ -235,7 +262,6 @@ class Anton_OT_Definer(bpy.types.Operator):
             geo_points = OrderedDict()
             geo_edges = OrderedDict()
 
-            # GET POINTS FROM DATA
             i = 1
             for _surface in data:
                 for _vertex in _surface:
@@ -244,11 +270,9 @@ class Anton_OT_Definer(bpy.types.Operator):
                         geo_points[i] = _vertex
                         i += 1
 
-            # GET TRIANGLES FROM DATA
             for i, _data in enumerate(data):
                 triangles[i+1] = [points[_data[0]], points[_data[1]], points[_data[2]]]
 
-            # GET EDGES FROM TRIANGLES
             i = 1
             for _triangle in triangles.values():
                 for _edge in self.get_edge_indices(_triangle):
@@ -257,7 +281,6 @@ class Anton_OT_Definer(bpy.types.Operator):
                         geo_edges[i] = _edge
                         i += 1
 
-            # GET CURVE_LOOP FROM TRIANGLES
             for _triangle_id in triangles.keys():
                 curve_loop[_triangle_id] = []
                 for connection in self.get_curve_loop(triangles[_triangle_id]):
@@ -307,13 +330,11 @@ class Anton_OT_Definer(bpy.types.Operator):
                             else:
                                 node_loads[_force_id][_node] = distributed_force[_force_id] * _area/3.0
 
-            scene.attributes['LOAD'] = OrderedDict()
-
             for _force_id in directions.keys():
                 direction_vector = np.array(directions[_force_id])
                 for _node_id in node_loads[_force_id].keys():
                     force_magnitude = node_loads[_force_id][_node_id]
-                    scene.attributes['LOAD'][int(_node_id)] = force_magnitude * direction_vector
+                    scene.load[int(_node_id)] = force_magnitude * direction_vector
 
             np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.nodes'), nodes)
             np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.elements'), elements)
@@ -323,7 +344,6 @@ class Anton_OT_Definer(bpy.types.Operator):
             np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.nds'),
                         np.array(list(no_design_nodes), dtype=np.int))
 
-            scene.attributes['OPT'] = OrderedDict()
             gmsh.finalize()
 
             scene.anton.defined = True
@@ -351,6 +371,42 @@ class Anton_OT_Definer(bpy.types.Operator):
                     edges,
                     curve_loop,
                     clmax):
+
+        """Creates a tetrahedral finite element mesh of the object with **gmsh_api**, adds physical groups for fixed, forced and non-design space faces
+        and retrieves direction of each applied force from assigned vertex groups. 
+
+        :param path: Workspace path
+        :type path: ``str``
+        :param filename: Name of the initialized object
+        :type filename: ``str``
+
+        :param fixed_faces: Indices of fixed faces
+        :type fixed_faces: ``set``
+        :param no_design_faces: Indices of non-design space faces
+        :type no_design_faces: ``set``
+        :param forced_faces: Indices of faces corresponding to each force
+        :type forced_faces: ``dict``
+        :param forced_magnitudes:  Magnitude of each force
+        :type forced_magnitudes: ``dict``
+        
+        :param forced_directions: Direction of each force
+        :type forced_directions: ``dict``
+        :param forced_direction_signs: Direction sign of each force
+        :type forced_direction_signs: ``dict``
+
+        :param curve_loop: Connectivity of each triangle of the object
+        :type curve_loop: ``dict``
+
+        :param geo_points: Vertices of the object
+        :type geo_points: ``dict``
+        :param geo_edges: Edges of the object
+        :type geo_edges: ``dict``
+
+        :param clmax: Maximum element size
+        :type clmax: ``float``
+
+        :return: ``nodes``, ``elements``, ``fixed_nodes``, ``no_design_nodes``, ``forced_nodes``, ``directions``, ``distributed_force``
+        """
 
         geo = gmsh.model.geo
         lc = clmax
@@ -469,7 +525,7 @@ class Anton_OT_Definer(bpy.types.Operator):
                     data.append([])
                 else:
                     if 'vertex' in line:
-                        # IGNORING NORMALS FOR NOW
+                        # Ignoring normals
                         data[-1].append(tuple(map(float, line[:-1].split(' ')[1:])))
 
                 line = f.readline()
@@ -483,7 +539,7 @@ class Anton_OT_Definer(bpy.types.Operator):
         return vec/vec_mag
 
     @staticmethod
-    def compute_area(points):
+    def compute_area(points):   
         v1 = points[1] - points[0]
         v2 = points[2] - points[0]
         v3 = np.cross(v1, v2)

@@ -2,6 +2,10 @@ import bpy
 from bpy.props import StringProperty, IntProperty, FloatProperty, EnumProperty, BoolProperty
 
 class ForcePropertyGroup(bpy.types.PropertyGroup):
+        """
+        :ivar magnitude: Magnitude of the specified force (``1.0N``)
+        :vartype magnitude: ``float``
+        """
 
         magnitude : FloatProperty(
                                 name="N",
@@ -12,6 +16,71 @@ class ForcePropertyGroup(bpy.types.PropertyGroup):
 
 
 class AntonPropertyGroup(bpy.types.PropertyGroup):
+        """A class for dynamically defined sets of properties that are defined
+        via **Anton_PT_Panel** and used across all the operator classes.
+
+        :ivar initialized: Is the problem initialized?
+        :vartype initialized: ``bool``
+        :ivar forced: Forces acting on the object has been specified?
+        :vartype forced: ``bool``
+        :ivar force_directioned: Direction for each force has been specified?
+        :vartype force_directioned: ``bool``
+        :ivar defined: Is the problem well-defined?
+        :vartype defined: ``bool``
+
+        :ivar filename: Name of the active-object
+        :vartype filename: ``str``
+        :ivar workspace_path: Path to workspace folder (``/tmp/``)
+        :vartype workspace_path: ``str``
+        :ivar mode: Design space defintion mode (``SHAPE``)
+        :vartype mode: ``enum``
+        :ivar number_of_forces: Number of forces acting on the object (``1``)
+        :vartype number_of_forces: ``int``
+
+        :ivar include_fixed: Add fixed faces to non-design space? (``False``)
+        :vartype include_fixed: ``bool``
+        :ivar include_forced: Add forced faces to non-design space? (``False``)
+        :vartype include_forced: ``bool``
+        :ivar density_filter: Apply a smoothing filter on densities? (``False``)
+        :vartype density_filter: ``bool``
+        :ivar sensitivity_filter: Apply a smoothing filter to sensitivity? (``True``)
+        :vartype sensitivity_filter: ``bool``
+
+        :ivar cl_max: Maximum size of tetrahedral element (``0.1``)
+        :vartype cl_max: ``float``
+        :ivar rmin: Radius of neighbourhood (``0.2``)
+        :vartype rmin: ``float``
+        :ivar number_of_neighbours: Number of neighbours (``7``)
+        :vartype number_of_neighbours: ``int``
+
+        :ivar density_change: Change in density per iteration (``0.2``)
+        :vartype density_change: ``float``
+        :ivar emin: Minimum allowable value of Young's modulus (``1.0``)
+        :vartype emin: ``float``
+
+        :ivar metaballrad: Radius of metaballs (``0.2``)
+        :vartype metaballrad: ``float``
+        :ivar metaballsens: Sensitivity of metaballs (``0.7``)
+        :vartype metaballsens: ``float``
+        :ivar volumina_ratio: Global volume fraction (``0.4``)
+        :vartype volumina_ratio: ``float``
+        :ivar penalty_exponent: Penalization factor for densities (``3.0``)
+        :vartype penalty_exponent: ``float``
+
+        :ivar number_of_iterations: Number of optimization iterations (``30``)
+        :vartype number_of_iterations: ``int``
+        :ivar viz_iteration: Which iteration to visualize? (``30``)
+        :vartype viz_iteration: ``int``
+        :ivar keyframes: Total number of keyframes (``30``)
+        :vartype keyframes: ``int``
+        :ivar slices: Number of instantiation points (``3``)
+        :vartype slices: ``int``
+
+        :ivar material: Material of the object (``PLA-Generic``)
+        :vartype material: ``enum``
+
+        \\
+        """
 
         initialized : BoolProperty(default=False)
         forced : BoolProperty(default=False)
@@ -19,6 +88,26 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
         defined : BoolProperty(default=False)
 
         filename : StringProperty()
+
+        workspace_path : StringProperty(
+                name="",
+                description="Path for the results",
+                default='/tmp/',
+                subtype='DIR_PATH')
+
+        mode : EnumProperty(
+                name='mode',
+                items=[
+                        ('SHAPE', 'Shape', 'Defined design space'),
+                        ('HULL', 'Hull', 'Undefined design space')],
+                default='SHAPE'
+        )
+
+        number_of_forces : IntProperty(
+                name="Forces",
+                default=1,
+                min=1,
+                description="Number of forces acting on the object")
 
         include_fixed : BoolProperty(
                 name='Fixed',
@@ -88,12 +177,6 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 precision=2,
                 description="Sensitivity of metaballs")
 
-        workspace_path : StringProperty(
-                name="",
-                description="Path for the results",
-                default='/tmp/',
-                subtype='DIR_PATH')
-
         volumina_ratio : FloatProperty(
                 name="",
                 default=0.4,
@@ -109,12 +192,6 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 max = 15.0,
                 precision=3,
                 description="Exponent for the penalty function by using SIMP method")
-
-        number_of_forces : IntProperty(
-                name="Forces",
-                default=1,
-                min=1,
-                description="Number of forces acting on the model")
 
         number_of_iterations : IntProperty(
                 name="",
@@ -145,14 +222,6 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 default=7,
                 min=5,
                 description="Number of nearest neighbours for filtering")
-
-        mode : EnumProperty(
-                name='mode',
-                items=[
-                        ('SHAPE', 'Shape', 'Defined design space'),
-                        ('HULL', 'Hull', 'Undefined design space')],
-                default='SHAPE'
-        )
 
         material : EnumProperty(
                 name='',
