@@ -57,16 +57,58 @@
 </div>
 <ul class="simple">
 <li><p>Specify the <code class="docutils literal notranslate"><span class="pre">number</span> <span class="pre">of</span> <span class="pre">forces</span></code> acting on the object.</p></li>
-<li><p>Assign materials to face(s) corresponding to each force.</p></li>
-<li><p>Assign vertex groups to edges that depict the direction of each corresponding force.</p></li>
-<li><p>Input the magnitude and click the <code class="docutils literal notranslate"><span class="pre">Expand</span></code> button to visualize each one of the aaplied forces.</p></li>
+<li><p>Assign <code class="docutils literal notranslate"><span class="pre">materials</span></code> to face(s) corresponding to each force, fixed and non-design space.</p></li>
+<li><p>Assign <code class="docutils literal notranslate"><span class="pre">vertex</span> <span class="pre">groups</span></code> to edges that depict the direction of each corresponding force.</p></li>
+<li><p>Input the <code class="docutils literal notranslate"><span class="pre">magnitude</span></code> and click the <code class="docutils literal notranslate"><span class="pre">Expand</span></code> button to visualize each one of the applied forces.</p></li>
+<li><p>Specify the <code class="docutils literal notranslate"><span class="pre">maximum</span> <span class="pre">element</span> <span class="pre">size</span></code> for tetrahedral finite element mesh generation and click <code class="docutils literal notranslate"><span class="pre">Define</span></code></p></li>
 </ul>
+<p></p>
+<img alt="Define" src="_images/define.gif" />
 </div>
 <div class="section" id="generate">
 <h2>Generate<a class="headerlink" href="#generate" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-right" style="width: 32%">
+<img alt="_images/gen.png" src="_images/gen.png" />
+</div>
+<ul class="simple">
+<li><p>Select a <code class="docutils literal notranslate"><span class="pre">material</span></code> for the object.</p></li>
+<li><dl class="simple">
+<dt>Specify optimization parameters:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Emin</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Density</span> <span class="pre">change</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Volumina</span> <span class="pre">ratio</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Penalty</span> <span class="pre">exponent</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Specify filter parameters:</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Number</span> <span class="pre">of</span> <span class="pre">neighbours</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Neighbourhood</span> <span class="pre">radius</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>Read more about these parameters <a class="reference external" href="scripts.html#module-properties">here.</a></p></li>
+<li><p>For a conceptual understanding of these parameters, read <a class="reference external" href="https://www.researchgate.net/publication/225613840_Material_interpolation_schemes_in_topology_optimization">Material interpolation schemes in topology optimization.</a></p></li>
+<li><p>Input the <code class="docutils literal notranslate"><span class="pre">number</span> <span class="pre">of</span> <span class="pre">iterations</span></code> and click <code class="docutils literal notranslate"><span class="pre">Generate</span></code></p></li>
+</ul>
 </div>
 <div class="section" id="visualize">
 <h2>Visualize<a class="headerlink" href="#visualize" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-right" style="width: 32%">
+<img alt="_images/viz.png" src="_images/viz.png" />
+</div>
+<ul class="simple">
+<li><p>Specify <code class="docutils literal notranslate"><span class="pre">radius</span></code> and <code class="docutils literal notranslate"><span class="pre">sensitivity</span></code> of the <a class="reference external" href="https://docs.blender.org/manual/en/latest/modeling/metas/introduction.html">metaballs.</a></p></li>
+<li><p>Input the <code class="docutils literal notranslate"><span class="pre">number</span> <span class="pre">of</span> <span class="pre">keyframes</span></code> and <code class="docutils literal notranslate"><span class="pre">instantiation</span> <span class="pre">points</span></code> for animation.</p></li>
+<li><p>Mention which iteration to visualize and click <code class="docutils literal notranslate"><span class="pre">Visualize</span></code>.</p></li>
+<li><p>The generated metaball object can then be converted into a mesh via <code class="docutils literal notranslate"><span class="pre">Object</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">Covert</span> <span class="pre">to</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">Mesh</span> <span class="pre">from</span> <span class="pre">Curve/Meta/Surf/Text</span></code></p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">Smooth</span> <span class="pre">Corrective</span></code> modifier can then be applied on the mesh during export.</p></li>
+</ul>
+<p></p>
+<img alt="Visualize" src="_images/visualize.gif" />
 </div>
 </div>
 
