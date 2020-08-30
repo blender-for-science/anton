@@ -6,6 +6,9 @@
 Welcome to anton's documentation!
 =================================
 
+.. image:: ../anton.gif
+   :alt: anton
+
 .. image:: https://img.shields.io/badge/Blender-2.80%2B-orange
    :target: https://www.blender.org/
    :alt: Blender
@@ -21,9 +24,6 @@ Welcome to anton's documentation!
 .. image:: https://badges.gitter.im/blender-for-science/community.svg
    :target: https://gitter.im/blender-for-science/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
    :alt: Gitter
-
-.. image:: ../anton.gif
-   :alt: anton
 
 
 What is Generative design?

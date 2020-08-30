@@ -59,14 +59,14 @@ via <strong>Anton_PT_Panel</strong> and used across all the operator classes.</p
 <li><p><strong>include_forced</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Add forced faces to non-design space? (<code class="docutils literal notranslate"><span class="pre">False</span></code>)</p></li>
 <li><p><strong>density_filter</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Apply a smoothing filter on densities? (<code class="docutils literal notranslate"><span class="pre">False</span></code>)</p></li>
 <li><p><strong>sensitivity_filter</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Apply a smoothing filter to sensitivity? (<code class="docutils literal notranslate"><span class="pre">True</span></code>)</p></li>
-<li><p><strong>cl_max</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Maximum size of tetrahedral element (<code class="docutils literal notranslate"><span class="pre">0.1</span></code>)</p></li>
+<li><p><strong>cl_max</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Maximum size of tetrahedral element (<code class="docutils literal notranslate"><span class="pre">0.2</span></code>)</p></li>
 <li><p><strong>rmin</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Radius of neighbourhood (<code class="docutils literal notranslate"><span class="pre">0.2</span></code>)</p></li>
-<li><p><strong>number_of_neighbours</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of neighbours (<code class="docutils literal notranslate"><span class="pre">7</span></code>)</p></li>
+<li><p><strong>number_of_neighbours</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of neighbours (<code class="docutils literal notranslate"><span class="pre">10</span></code>)</p></li>
 <li><p><strong>density_change</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Change in density per iteration (<code class="docutils literal notranslate"><span class="pre">0.2</span></code>)</p></li>
 <li><p><strong>emin</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Minimum allowable value of Young’s modulus (<code class="docutils literal notranslate"><span class="pre">1.0</span></code>)</p></li>
 <li><p><strong>metaballrad</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Radius of metaballs (<code class="docutils literal notranslate"><span class="pre">0.2</span></code>)</p></li>
 <li><p><strong>metaballsens</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Sensitivity of metaballs (<code class="docutils literal notranslate"><span class="pre">0.7</span></code>)</p></li>
-<li><p><strong>volumina_ratio</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Global volume fraction (<code class="docutils literal notranslate"><span class="pre">0.4</span></code>)</p></li>
+<li><p><strong>volumina_ratio</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Ratio between the design space and solution space (<code class="docutils literal notranslate"><span class="pre">0.4</span></code>)</p></li>
 <li><p><strong>penalty_exponent</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Penalization factor for densities (<code class="docutils literal notranslate"><span class="pre">3.0</span></code>)</p></li>
 <li><p><strong>number_of_iterations</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of optimization iterations (<code class="docutils literal notranslate"><span class="pre">30</span></code>)</p></li>
 <li><p><strong>viz_iteration</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Which iteration to visualize? (<code class="docutils literal notranslate"><span class="pre">30</span></code>)</p></li>
@@ -147,7 +147,7 @@ a scaled convexhull as design space boundary.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">bpy.types.Operator</span></code></p>
 <dl class="py method">
 <dt id="definer.Anton_OT_Definer.create_geo">
-<code class="sig-name descname">create_geo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">fixed_faces</span></em>, <em class="sig-param"><span class="n">no_design_faces</span></em>, <em class="sig-param"><span class="n">forced_faces</span></em>, <em class="sig-param"><span class="n">forced_magnitudes</span></em>, <em class="sig-param"><span class="n">forced_directions</span></em>, <em class="sig-param"><span class="n">forced_direction_signs</span></em>, <em class="sig-param"><span class="n">geo_points</span></em>, <em class="sig-param"><span class="n">geo_edges</span></em>, <em class="sig-param"><span class="n">points</span></em>, <em class="sig-param"><span class="n">edges</span></em>, <em class="sig-param"><span class="n">curve_loop</span></em>, <em class="sig-param"><span class="n">clmax</span></em><span class="sig-paren">)</span><a class="headerlink" href="#definer.Anton_OT_Definer.create_geo" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">create_geo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">fixed_faces</span></em>, <em class="sig-param"><span class="n">non_design_faces</span></em>, <em class="sig-param"><span class="n">forced_faces</span></em>, <em class="sig-param"><span class="n">forced_magnitudes</span></em>, <em class="sig-param"><span class="n">forced_directions</span></em>, <em class="sig-param"><span class="n">forced_direction_signs</span></em>, <em class="sig-param"><span class="n">geo_points</span></em>, <em class="sig-param"><span class="n">geo_edges</span></em>, <em class="sig-param"><span class="n">points</span></em>, <em class="sig-param"><span class="n">edges</span></em>, <em class="sig-param"><span class="n">curve_loop</span></em>, <em class="sig-param"><span class="n">clmax</span></em><span class="sig-paren">)</span><a class="headerlink" href="#definer.Anton_OT_Definer.create_geo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a tetrahedral finite element mesh of the object with <strong>gmsh_api</strong>, adds physical groups for fixed, forced and non-design space faces
 and retrieves direction of each applied force from assigned vertex groups.</p>
 <dl class="field-list simple">
@@ -156,7 +156,7 @@ and retrieves direction of each applied force from assigned vertex groups.</p>
 <li><p><strong>path</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – Workspace path</p></li>
 <li><p><strong>filename</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – Name of the initialized object</p></li>
 <li><p><strong>fixed_faces</strong> (<code class="docutils literal notranslate"><span class="pre">set</span></code>) – Indices of fixed faces</p></li>
-<li><p><strong>no_design_faces</strong> (<code class="docutils literal notranslate"><span class="pre">set</span></code>) – Indices of non-design space faces</p></li>
+<li><p><strong>non_design_faces</strong> (<code class="docutils literal notranslate"><span class="pre">set</span></code>) – Indices of non-design space faces</p></li>
 <li><p><strong>forced_faces</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – Indices of faces corresponding to each force</p></li>
 <li><p><strong>forced_magnitudes</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – Magnitude of each force</p></li>
 <li><p><strong>forced_directions</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – Direction of each force</p></li>
@@ -168,7 +168,7 @@ and retrieves direction of each applied force from assigned vertex groups.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">elements</span></code>, <code class="docutils literal notranslate"><span class="pre">fixed_nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">no_design_nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">forced_nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">directions</span></code>, <code class="docutils literal notranslate"><span class="pre">distributed_force</span></code></p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">elements</span></code>, <code class="docutils literal notranslate"><span class="pre">fixed_nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">non_design_nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">forced_nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">directions</span></code>, <code class="docutils literal notranslate"><span class="pre">distributed_force</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -184,7 +184,7 @@ the mesh variables as a binary numpy file which is accessed by <code class="docu
 <li><p><strong>nodes</strong> (<em>numpy.array</em> of <code class="docutils literal notranslate"><span class="pre">float</span></code>) – Cartesian position of nodes</p></li>
 <li><p><strong>elements</strong> (<em>numpy.array</em> of <code class="docutils literal notranslate"><span class="pre">int</span></code>) – Connectivity array of nodes</p></li>
 <li><p><strong>fixed_nodes</strong> (<em>numpy.array</em> of <code class="docutils literal notranslate"><span class="pre">int</span></code>) – Indices of fixed nodes</p></li>
-<li><p><strong>no_design_nodes</strong> (<em>numpy.array</em> of <code class="docutils literal notranslate"><span class="pre">int</span></code>) – Indices of non-design nodes</p></li>
+<li><p><strong>non_design_nodes</strong> (<em>numpy.array</em> of <code class="docutils literal notranslate"><span class="pre">int</span></code>) – Indices of non-design nodes</p></li>
 <li><p><strong>forced_nodes</strong> (<em>numpy.array</em> of <code class="docutils literal notranslate"><span class="pre">int</span></code>) – Indices of forced nodes</p></li>
 <li><p><strong>directions</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – Direction vector corresponding to each force</p></li>
 <li><p><strong>distributed_force</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – Magnitude per area of each force</p></li>
@@ -227,7 +227,7 @@ a grease pencil object whose color corresponds to the applied force. Arrow head 
 <dl class="py method">
 <dt id="processor.Anton_OT_Processor.execute">
 <code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context</span></em><span class="sig-paren">)</span><a class="headerlink" href="#processor.Anton_OT_Processor.execute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Solves the optimization problem defined by <code class="docutils literal notranslate"><span class="pre">nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">elements</span></code>, <code class="docutils literal notranslate"><span class="pre">fixed</span></code>, <code class="docutils literal notranslate"><span class="pre">no_design_nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">youngs</span></code>, <code class="docutils literal notranslate"><span class="pre">poisson</span></code>.
+<dd><p>Solves the optimization problem defined by <code class="docutils literal notranslate"><span class="pre">nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">elements</span></code>, <code class="docutils literal notranslate"><span class="pre">fixed</span></code>, <code class="docutils literal notranslate"><span class="pre">non_design_nodes</span></code>, <code class="docutils literal notranslate"><span class="pre">youngs</span></code>, <code class="docutils literal notranslate"><span class="pre">poisson</span></code>.
 Loads the saved numpy variables and computes stiffness matrix with a pyOptFEM vectorized function,
 solves for displacement and heads on to the optimization loop.</p>
 <dl class="field-list simple">
@@ -236,7 +236,7 @@ solves for displacement and heads on to the optimization loop.</p>
 <li><p><strong>convergence</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Convergence of sensitivity for optimization</p></li>
 <li><p><strong>fixed_elements</strong> (<em>numpy.array</em> of <code class="docutils literal notranslate"><span class="pre">int</span></code>) – Indices of fixed elements</p></li>
 <li><p><strong>forced_elements</strong> (<em>numpy.array</em> of <code class="docutils literal notranslate"><span class="pre">int</span></code>) – Indices of forced elements</p></li>
-<li><p><strong>no_design_set</strong> (<em>numpy.array</em> of <code class="docutils literal notranslate"><span class="pre">int</span></code>) – Non-design space elements</p></li>
+<li><p><strong>non_design_set</strong> (<em>numpy.array</em> of <code class="docutils literal notranslate"><span class="pre">int</span></code>) – Non-design space elements</p></li>
 <li><p><strong>edofmat</strong> (<em>numpy.array</em> of <code class="docutils literal notranslate"><span class="pre">int</span></code>) – Element DOF mapping</p></li>
 <li><p><strong>free</strong> (<em>numpy.array</em> of <code class="docutils literal notranslate"><span class="pre">int</span></code>) – Indices of free nodes</p></li>
 <li><p><strong>element_centers</strong> (<em>numpy.array</em> of <code class="docutils literal notranslate"><span class="pre">float</span></code>) – Centroid of each element</p></li>
@@ -297,7 +297,7 @@ maintained by <strong>F. Cuvelier</strong>, <strong>C. Japhet</strong> and <stro
 <dl class="py method">
 <dt id="visualizer.Anton_OT_Visualizer.execute">
 <code class="sig-name descname">execute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context</span></em><span class="sig-paren">)</span><a class="headerlink" href="#visualizer.Anton_OT_Visualizer.execute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Visualizes results with metaballs which are implicit surfaces, meaning that they are not explicitly defined 
+<dd><p>Visualizes the generated outcome with metaballs which are implicit surfaces, meaning that they are not explicitly defined
 by vertices. Metaballs are instantiated at the centroid of each element with a density value above the specified threshold.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables</dt>
