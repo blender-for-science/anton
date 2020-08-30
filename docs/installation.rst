@@ -1,6 +1,10 @@
 Installation
 ============
 
+.. image:: ./installation.gif
+    :width: 550
+    :alt: Installation
+
 * Download the latest release
 * Open Blender and head over to ``Edit`` -> ``Preferences`` -> ``Add-ons`` -> ``Install``
 * Navigate to the downloaded **.zip** file and click ``Install Add-on``
@@ -12,6 +16,3 @@ Installation
     * ``tqdm``
 
 * If you dont have these modules installed, click ``Install required modules``
-
-.. image:: ./installation.gif
-   :alt: Installation

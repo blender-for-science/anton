@@ -29,7 +29,7 @@ Welcome to anton's documentation!
 What is Generative design?
 --------------------------
 
-Generative design is an iterative design exploration process that yields feasible design outcomes based on a set of well-defined 
+Generative design is a design exploration process that yields feasible design outcomes based on a set of well-defined 
 constraints and performance objectives, using one or more optimization methodologies. In practice, Topology optimization is used to generate
 numerous design outcomes by varying its parameters within an interval and the generated outcomes that best meet the performance objectives are filtered and processed further.
 
