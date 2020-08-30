@@ -1,0 +1,10 @@
+pip
+wheel
+setuptools
+future-fstrings
+gmsh_api
+tqdm
+sklearn
+scipy
+numpy
+bpy
