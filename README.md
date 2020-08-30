@@ -6,20 +6,19 @@
 
 ![anton](./anton.gif)
 
-anton is an open-source generative design framework built on Blender, the open-source 3D creation suite. At its current stage of development, anton uses a density-based topology optimization methodology as a design generator and uses implicit surfaces for mesh generation.
+``anton`` is an open-source generative design framework built on Blender, the open-source 3D creation suite. At its current stage of development, anton uses a density-based topology optimization methodology as a design generator and uses implicit surfaces for mesh generation.
 
 ## Installation
-*   Download the latest release
-*   Open Blender and head over to ``Edit`` -> ``Preferences`` -> ``Add-ons`` -> ``Install``
-*   Navigate to the downloaded **.zip** file and click ``Install Add-on``
-*   Enable the installed add-on, anton looks for the these python modules,
-    *   ``Numpy``
-    *   ``Scipy``
-    *   ``Scikit-learn``
-    *   ``gmsh-api``
-    *   ``tqdm``
-
-*   If you dont have these modules installed, click ``Install required modules``
+* Download the latest release
+* Open Blender and head over to ``Edit`` -> ``Preferences`` -> ``Add-ons`` -> ``Install``
+* Navigate to the downloaded **.zip** file and click ``Install Add-on``
+* Enable the installed add-on, anton looks for the these python modules,
+    * ``Numpy``
+    * ``Scipy``
+    * ``Scikit-learn``
+    * ``gmsh-api``
+    * ``tqdm``
+* If you dont have these modules installed, click ``Install required modules``
 
 ## Documentation
 Read more about anton: 

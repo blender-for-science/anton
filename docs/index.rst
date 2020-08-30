@@ -36,7 +36,7 @@ numerous design outcomes by varying its parameters within an interval and the ge
 What is anton?
 --------------
 
-anton is an open-source generative design framework built on Blender, the open-source 3D creation suite. 
+``anton`` is an open-source generative design framework built on Blender, the open-source 3D creation suite. 
 At its current stage of development, anton uses a density-based topology optimization methodology as a design generator and
 uses implicit surfaces for mesh generation.
 
