@@ -3,4 +3,4 @@ tqdm
 sklearn
 scipy
 numpy
-bpy
+blender-addon-tester
