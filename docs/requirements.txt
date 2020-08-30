@@ -3,4 +3,4 @@ tqdm
 sklearn
 scipy
 numpy
-blender-addon-tester
+fake-bpy-module-2.80
