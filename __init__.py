@@ -31,7 +31,7 @@ bl_info = {
     "version" : (0, 1, 0),
     "location" : "View3D",
     "warning" : "",
-    "wiki_url" : "https://github.com/blender-for-science/anton",
+    "wiki_url" : "https://anton.readthedocs.io/en/latest/",
     "tracker_url" : "https://github.com/blender-for-science/anton/issues",
     "category" : "Mesh"
 }
