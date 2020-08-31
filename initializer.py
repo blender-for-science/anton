@@ -1,7 +1,6 @@
 import bpy
 import numpy as np
 import os
-from scipy.spatial import ConvexHull
 
 class Anton_OT_ForceUpdater(bpy.types.Operator):
     bl_idname = "anton.forceupdate"
@@ -96,6 +95,7 @@ class Anton_OT_Initializer(bpy.types.Operator):
         if not scene.anton.defined:
             if scene.anton.mode == 'HULL':
 
+                from scipy.spatial import ConvexHull
                 objects = list()
                 points = list()
 

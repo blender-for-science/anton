@@ -1,7 +1,6 @@
 from collections import OrderedDict
 import bpy
 import numpy as np
-import gmsh_api.gmsh as gmsh
 import os
 
 def get_grease_pencil(gpencil_obj_name='GPencil') -> bpy.types.GreasePencil:
@@ -203,6 +202,8 @@ class Anton_OT_Definer(bpy.types.Operator):
 
         \\
         """
+        import gmsh_api.gmsh as gmsh
+
         scene = context.scene
         active_object = bpy.data.objects[scene.anton.filename]
 
@@ -374,7 +375,7 @@ class Anton_OT_Definer(bpy.types.Operator):
                     clmax):
 
         """Creates a tetrahedral finite element mesh of the object with **gmsh_api**, adds physical groups for fixed, forced and non-design space faces
-        and retrieves direction of each applied force from assigned vertex groups. 
+        and retrieves direction of each applied force from assigned vertex groups.
 
         :param path: Workspace path
         :type path: ``str``
@@ -389,7 +390,7 @@ class Anton_OT_Definer(bpy.types.Operator):
         :type forced_faces: ``dict``
         :param forced_magnitudes:  Magnitude of each force
         :type forced_magnitudes: ``dict``
-        
+
         :param forced_directions: Direction of each force
         :type forced_directions: ``dict``
         :param forced_direction_signs: Direction sign of each force
@@ -408,6 +409,8 @@ class Anton_OT_Definer(bpy.types.Operator):
 
         :return: ``nodes``, ``elements``, ``fixed_nodes``, ``non_design_nodes``, ``forced_nodes``, ``directions``, ``distributed_force``
         """
+
+        import gmsh_api.gmsh as gmsh
 
         geo = gmsh.model.geo
         lc = clmax
@@ -540,7 +543,7 @@ class Anton_OT_Definer(bpy.types.Operator):
         return vec/vec_mag
 
     @staticmethod
-    def compute_area(points):   
+    def compute_area(points):
         v1 = points[1] - points[0]
         v2 = points[2] - points[0]
         v3 = np.cross(v1, v2)
