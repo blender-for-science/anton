@@ -10,18 +10,9 @@ class AntonPreferences(bpy.types.AddonPreferences):
         Pip._ensure_user_site_package()
 
         layout = self.layout
-        deps = ['gmsh_api', 'tqdm', 'sklearn', 'scipy', 'numpy']
-
-        flag = True
-        for _module in deps:
-            flag = flag and importlib.util.find_spec(_module) is not None
-
-        if flag:
-            layout.label(text='Loaded required modules.', icon='INFO')
-        else:
-            layout.label(text='anton requires few additional modules.', icon='ERROR')
-            row = layout.row()
-            row.operator('anton.installer')
+        layout.label(text='anton requires few additional modules.', icon='ERROR')
+        row = layout.row()
+        row.operator('anton.installer')
 
 class AntonInstaller(bpy.types.Operator):
     bl_idname = "anton.installer"
@@ -37,6 +28,11 @@ class AntonInstaller(bpy.types.Operator):
             Pip.install('scikit-learn')
             Pip.install('scipy')
             Pip.install('numpy')
+            Pip.install('pytz')
+            Pip.install('python-dateutil')
+            Pip.install('six')
+            Pip.install('pandas')
+            Pip.install('joblib')
 
             import gmsh_api
             from tqdm import tqdm
