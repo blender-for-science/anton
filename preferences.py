@@ -27,7 +27,7 @@ class AntonInstaller(bpy.types.Operator):
             Pip.install('gmsh-api')
             Pip.install('scikit-learn')
             Pip.install('scipy')
-            Pip.install('numpy')
+            # Pip.install('numpy')
             Pip.install('pytz')
             Pip.install('python-dateutil')
             Pip.install('six')
