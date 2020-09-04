@@ -4,7 +4,7 @@
 [![Documentation Status](https://readthedocs.org/projects/anton/badge/?version=latest)](https://anton.readthedocs.io/en/latest/?badge=latest)
 [![Release](https://img.shields.io/github/v/release/blender-for-science/anton)](https://github.com/blender-for-science/anton/releases)
 [![License](https://img.shields.io/github/license/blender-for-science/blendmsh)](https://github.com/blender-for-science/anton/blob/master/LICENSE.md)
-[![Discord](https://img.shields.io/discord/750488363571740747?color=738ADB&label=Discord&style=flat-square)](https://discord.gg/K4jwkG)
+[![Discord](https://img.shields.io/discord/750488363571740747?color=738ADB&label=Discord&style=flat-square)](https://discord.gg/tpq7Yuv)
 
 ![anton](./anton.gif)
 
