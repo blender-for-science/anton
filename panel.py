@@ -15,11 +15,6 @@ class Anton_PT_Panel(bpy.types.Panel):
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, 'workspace_path')
 
-        row = layout.row(align=True)
-        row.prop(scene.anton, "mode", icon='NONE', expand=True,
-                    slider=True, toggle=False, icon_only=False, event=False,
-                    full_event=False, emboss=True)
-
         col = layout.column()
         col.operator('anton.initialize', text='Initialize')
 

@@ -32,8 +32,6 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
         :vartype filename: ``str``
         :ivar workspace_path: Path to workspace folder (``/tmp/``)
         :vartype workspace_path: ``str``
-        :ivar mode: Design space defintion mode (``SHAPE``)
-        :vartype mode: ``enum``
         :ivar number_of_forces: Number of forces acting on the object (``1``)
         :vartype number_of_forces: ``int``
 
@@ -94,14 +92,6 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 description="Path to workspace folder",
                 default='/tmp/',
                 subtype='DIR_PATH')
-
-        mode : EnumProperty(
-                name='mode',
-                items=[
-                        ('SHAPE', 'Shape', 'Use existing geometry'),
-                        ('HULL', 'Hull', 'Form a convexhull')],
-                default='SHAPE'
-        )
 
         number_of_forces : IntProperty(
                 name="Forces",
