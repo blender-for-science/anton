@@ -38,7 +38,6 @@ bl_info = {
 
 import bpy
 from collections import OrderedDict
-from .preferences import AntonInstaller, AntonPreferences
 from .panel import Anton_PT_Panel
 from .properties import AntonPropertyGroup, ForcePropertyGroup
 from .initializer import Anton_OT_ForceUpdater, Anton_OT_Initializer
@@ -46,8 +45,8 @@ from .definer import Anton_OT_DirectionUpdater, Anton_OT_Definer
 from .processor import Anton_OT_Processor
 from .visualizer import Anton_OT_Visualizer
 
-classes = [AntonPreferences, AntonInstaller, Anton_PT_Panel, Anton_OT_Processor,
-            AntonPropertyGroup, ForcePropertyGroup, Anton_OT_ForceUpdater, Anton_OT_Visualizer,
+classes = [Anton_PT_Panel, Anton_OT_Processor, AntonPropertyGroup,
+            ForcePropertyGroup, Anton_OT_ForceUpdater, Anton_OT_Visualizer,
             Anton_OT_Initializer, Anton_OT_DirectionUpdater, Anton_OT_Definer]
 
 def register():
