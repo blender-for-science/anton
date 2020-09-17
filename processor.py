@@ -174,7 +174,7 @@ class Anton_OT_Processor(bpy.types.Operator):
 
         scene = context.scene
         if scene.anton.defined:
-            subprocess.call(["python3", os.path.join(scene.anton.taichi_path, "projects/spgrid_topo_opt/scripts/opt_anton.py")])
+            subprocess.call(["python3", "./optimizer.py", scene.anton.workspace_path, scene.anton.filename, "100"])
             return {'FINISHED'}
 
         else:

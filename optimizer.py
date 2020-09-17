@@ -155,10 +155,10 @@ class TopoOpt(Simulation):
     self.general_action('add_load', center=center, force=force, size=size)
 
   def add_customplane_dirichlet_bc(self, axis_to_fix, p0, p1, p2, thresh=0.003):
-    self.general_action(action='add_customplane_dirichlet_bc', axis_to_fix=axis_to_fix, p0=p0, p1=p1, p2=p2, scale=self.scale, thresh=thresh)
+    self.general_action(action='add_customplane_dirichlet_bc', axis_to_fix=axis_to_fix, p0=tuple(p0), p1=tuple(p1), p2=tuple(p2), scale=self.scale, thresh=thresh)
 
   def add_customplane_load(self, force, p0, p1, p2, thresh=0.003):
-    self.general_action(action='add_customplane_load', force=force, p0=p0, p1=p1, p2=p2, scale=self.scale, thresh=thresh)
+    self.general_action(action='add_customplane_load', force=tuple(force), p0=tuple(p0), p1=tuple(p1), p2=tuple(p2), scale=self.scale, thresh=thresh)
 
   def add_plane_load(self, force, axis_to_search=None, axis=None, extreme=1, bound1=(-1, -1, -1), bound2=(1, 1, 1)):
     if axis_to_search is None:
@@ -223,16 +223,4 @@ if __name__ == "__main__":
     for _face in _force:
       opt.add_customplane_load(force=force_vectors[i], p0=_face[0], p1=_face[1], p2=_face[2])
 
-  # opt.add_plane_dirichlet_bc(axis_to_fix="xyz", axis_to_search=2, extreme=-1)
-  # opt.add_customplane_dirichlet_bc(axis_to_fix="xyz", p0=(-1.234312, -1.000000, -1.000000), p1=(-1.234312, 1.000000, -1.000000), p2=(0.678907, -1.000000, -1.000000))
-  # opt.add_customplane_dirichlet_bc(axis_to_fix="xyz", p0=(0.678907, -1.000000, -1.000000), p1=(-1.234312, 1.000000, -1.000000), p2=(0.678907, 1.000000, -1.000000))
-
-  # opt.add_customplane_load(force=(1, 0, 0), p0=(1.234312, 1.000000, 3.434196), p1=(1.234312, -1.000000, 4.131650), p2=(1.234312, -1.000000, 3.434196))
-  # opt.add_customplane_load(force=(-1, 0, 0), p0=(0.678907, -1.000000, 3.434196), p1=(0.678907, 1.000000, 3.434196), p2=(0.678907, 1.000000, 4.131650))
-
-  # opt.add_customplane_load(force=(0, 0, -1), p0=(0.678907, 1.000000, 1.000000), p1=(-1.234312, -1.000000, 1.000000), p2=(0.678907, -1.000000, 1.000000))
-  # opt.add_customplane_load(force=(0, 0, -1), p0=(0.678907, 1.000000, 1.000000), p1=(-1.234312, 1.000000, 1.000000), p2=(-1.234312, -1.000000, 1.000000))
-
-  # opt.general_action(action='add_precise_plane_force_bridge')
-  # Optimize
   opt.run()
