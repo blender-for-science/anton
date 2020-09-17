@@ -2,6 +2,7 @@ from collections import OrderedDict
 import bpy
 import numpy as np
 import os
+import subprocess
 
 def get_grease_pencil(gpencil_obj_name='GPencil') -> bpy.types.GreasePencil:
     if gpencil_obj_name not in bpy.context.scene.objects:
@@ -267,7 +268,9 @@ class Anton_OT_Definer(bpy.types.Operator):
                 forces.append(forced_faces[_force_id])
                 force_vectors.append(scene.forced_magnitudes[_force_id] * scene.forced_direction_signs[_force_id] * forced_directions[i])
 
-            print(np.array(forces), np.array(force_vectors))
+            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename, 'fixed.npy'), np.array(fixed_faces))
+            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename, 'forces.npy'), np.array(forces))
+            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename, 'force_vectors.npy'), np.array(force_vectors))
 
             self.report({'INFO'}, 'Fixed: {}, Non Design Space: {}, Force: {}'.format(
                                                                                 len(fixed_faces),
@@ -282,198 +285,11 @@ class Anton_OT_Definer(bpy.types.Operator):
             self.report({'ERROR'}, 'Problem ill-defined')
             return {'CANCELLED'}
 
-
-    def create_geo(self,
-                    path,
-                    filename,
-                    fixed_faces,
-                    non_design_faces,
-                    forced_faces,
-                    forced_magnitudes,
-                    forced_directions,
-                    forced_direction_signs,
-                    geo_points,
-                    geo_edges,
-                    points,
-                    edges,
-                    curve_loop,
-                    clmax):
-
-        """Creates a tetrahedral finite element mesh of the object with **gmsh_api**, adds physical groups for fixed, forced and non-design space faces
-        and retrieves direction of each applied force from assigned vertex groups.
-
-        :param path: Workspace path
-        :type path: ``str``
-        :param filename: Name of the initialized object
-        :type filename: ``str``
-
-        :param fixed_faces: Indices of fixed faces
-        :type fixed_faces: ``set``
-        :param non_design_faces: Indices of non-design space faces
-        :type non_design_faces: ``set``
-        :param forced_faces: Indices of faces corresponding to each force
-        :type forced_faces: ``dict``
-        :param forced_magnitudes:  Magnitude of each force
-        :type forced_magnitudes: ``dict``
-
-        :param forced_directions: Direction of each force
-        :type forced_directions: ``dict``
-        :param forced_direction_signs: Direction sign of each force
-        :type forced_direction_signs: ``dict``
-
-        :param curve_loop: Connectivity of each triangle of the object
-        :type curve_loop: ``dict``
-
-        :param geo_points: Vertices of the object
-        :type geo_points: ``dict``
-        :param geo_edges: Edges of the object
-        :type geo_edges: ``dict``
-
-        :param clmax: Maximum element size
-        :type clmax: ``float``
-
-        :return: ``nodes``, ``elements``, ``fixed_nodes``, ``non_design_nodes``, ``forced_nodes``, ``directions``, ``distributed_force``
-        """
-
-        import gmsh_api.gmsh as gmsh
-
-        geo = gmsh.model.geo
-        lc = clmax
-
-        directions = OrderedDict()
-        force_per_areas = OrderedDict()
-        distributed_force = OrderedDict()
-
-        all_forced_faces = set()
-        for _face_lists in forced_faces.values():
-            for _face_id in _face_lists:
-                all_forced_faces.add(_face_id)
-
-        for _point in points.keys():
-            geo.addPoint(_point[0], _point[1], _point[2], lc, points[_point])
-
-        for _edge in edges.keys():
-            geo.addLine(_edge[0], _edge[1], edges[_edge])
-
-        for _force_id in forced_directions.keys():
-            forced_edge = geo_edges[forced_directions[_force_id]]
-            forced_vertices = []
-            for _vertex_id in forced_edge:
-                forced_vertices.append(geo_points[_vertex_id])
-
-            if _force_id in forced_direction_signs.keys():
-                directions[_force_id] = forced_direction_signs[_force_id] * self.compute_direction(forced_vertices)
-            else:
-                directions[_force_id] = self.compute_direction(forced_vertices)
-
-
-        for _curve_id in curve_loop.keys():
-            geo.addCurveLoop([curve_loop[_curve_id][0], curve_loop[_curve_id][1], curve_loop[_curve_id][2]], _curve_id)
-            surf_temp = geo.addPlaneSurface([_curve_id], _curve_id)
-
-            if _curve_id in fixed_faces:
-                gmsh.model.addPhysicalGroup(2, [surf_temp], _curve_id)
-
-            elif _curve_id in non_design_faces:
-                gmsh.model.addPhysicalGroup(2, [surf_temp], _curve_id)
-
-            elif _curve_id in all_forced_faces:
-                gmsh.model.addPhysicalGroup(2, [surf_temp], _curve_id)
-
-        for _force_id in forced_faces.keys():
-            force_per_areas[_force_id] = []
-            for _face_id in forced_faces[_force_id]:
-                temp_vertex_ids = set()
-                temp_vertices = []
-
-                for _edge_id in np.abs(curve_loop[_face_id]):
-                    for _point_id in geo_edges[_edge_id]:
-                        temp_vertex_ids.add(_point_id)
-
-                for _vertex_id in temp_vertex_ids:
-                    temp_vertices.append(np.array(geo_points[_vertex_id]))
-
-                force_per_areas[_force_id].append(self.compute_area(temp_vertices))
-
-        for _force_id in force_per_areas.keys():
-            distributed_force[_force_id] = forced_magnitudes[_force_id]/np.sum(force_per_areas[_force_id])
-
-        sl = geo.addSurfaceLoop(list(curve_loop.keys()))
-        _ = geo.addVolume([sl])
-
-        gmsh.model.geo.synchronize()
-        gmsh.option.setNumber("Mesh.Algorithm", 0)
-        gmsh.option.setNumber("Mesh.ElementOrder", 1)
-
-        gmsh.option.setNumber("Mesh.Optimize", 1)
-        gmsh.option.setNumber("Mesh.QualityType", 2)
-        gmsh.option.setNumber("Mesh.SaveAll", 1)
-        gmsh.model.mesh.generate(3)
-
-        fixed_nodes = set()
-        non_design_nodes = set()
-        forced_nodes = OrderedDict()
-
-        nodes = np.array(gmsh.model.mesh.getNodes()[1]).reshape(len(gmsh.model.mesh.getNodes()[0]), 3)
-        elements = np.array(gmsh.model.mesh.getElements(3)[2][0], dtype=np.int).reshape(len(gmsh.model.mesh.getElements(3)[1][0]), 4) - 1
-
-        for _face_id in fixed_faces:
-            for _fixed_node_id in gmsh.model.mesh.getNodesForPhysicalGroup(2, _face_id)[0]:
-                fixed_nodes.add(_fixed_node_id - 1)
-
-        for _face_id in non_design_faces:
-            for _non_design_node_id in gmsh.model.mesh.getNodesForPhysicalGroup(2, _face_id)[0]:
-                non_design_nodes.add(_non_design_node_id - 1)
-
-        for _force_id in forced_faces.keys():
-            forced_nodes[_force_id] = []
-            for _face_id in forced_faces[_force_id]:
-                forced_nodes[_force_id].append([])
-                # print(gmsh.model.mesh.getNodesForPhysicalGroup(2, _face_id)[0])
-                for _forced_node_id in gmsh.model.mesh.getNodesForPhysicalGroup(2, _face_id)[0]:
-                    forced_nodes[_force_id][-1].append(int(_forced_node_id - 1))
-
-        gmsh.write(os.path.join(path, filename+'.msh'))
-        return nodes, elements, fixed_nodes, non_design_nodes, forced_nodes, directions, distributed_force
-
-    @staticmethod
-    def get_curve_loop(surf):
-        return [(surf[0], surf[1]), (surf[1], surf[2]), (surf[2], surf[0])]
-
-    @staticmethod
-    def get_edge_indices(surf):
-        return [(surf[0], surf[2]), (surf[0], surf[1]), (surf[1], surf[2])]
-
-    @staticmethod
-    def get_raw_data(path):
-        data = [[]]
-        with open(path, 'r') as f:
-            line = f.readline()
-            while(line):
-                if 'endfacet' in line:
-                    data.append([])
-                else:
-                    if 'vertex' in line:
-                        # Ignoring normals
-                        data[-1].append(tuple(map(float, line[:-1].split(' ')[1:])))
-
-                line = f.readline()
-
-        return data[:-1]
-
     @staticmethod
     def compute_direction(points):
         vec = np.array(points[0]) - np.array(points[1])
         vec_mag = np.linalg.norm(vec)
         return vec/vec_mag
-
-    @staticmethod
-    def compute_area(points):
-        v1 = points[1] - points[0]
-        v2 = points[2] - points[0]
-        v3 = np.cross(v1, v2)
-        return 0.5 * np.linalg.norm(v3)
-
 
 
 
