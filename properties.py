@@ -93,6 +93,12 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 default='/tmp/',
                 subtype='DIR_PATH')
 
+        taichi_path : StringProperty(
+                name="",
+                description="Path to taichi folder",
+                default='/home/holycow/chi/taichi',
+                subtype='DIR_PATH')
+
         number_of_forces : IntProperty(
                 name="Forces",
                 default=1,
