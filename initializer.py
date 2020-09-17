@@ -92,14 +92,27 @@ class Anton_OT_Initializer(bpy.types.Operator):
 
         if not scene.anton.defined:
             scene.anton.filename = active_object.name
-
-            bpy.ops.export_mesh.stl(filepath=os.path.join(scene.anton.workspace_path, scene.anton.filename + '.stl'), ascii=True)
-            active_object.select_set(True)
-            bpy.ops.object.delete()
-
-            bpy.ops.import_mesh.stl(filepath=os.path.join(scene.anton.workspace_path, scene.anton.filename + '.stl'))
-
-            active_object = bpy.context.active_object
+            bpy.ops.object.modifier_add(type='TRIANGULATE')
+            bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Triangulate")
+            bpy.ops.export_scene.obj(filepath=scene.anton.workspace_path + scene.anton.filename + '.obj', 
+                                        check_existing=True,
+                                        axis_forward='Y',
+                                        axis_up='Z',
+                                        filter_glob="*.obj;*.mtl",
+                                        use_selection=False,
+                                        use_animation=False,
+                                        use_mesh_modifiers=True,
+                                        use_normals=False,
+                                        use_uvs=False,
+                                        use_materials=False,
+                                        use_triangles=True,
+                                        use_nurbs=False,
+                                        use_vertex_groups=False,
+                                        use_blen_objects=True,
+                                        group_by_object=False,
+                                        group_by_material=False,
+                                        keep_vertex_order=True,
+                                        global_scale=1, path_mode='AUTO')
 
             scene.anton.initialized = True
             self.report({'INFO'}, 'Initialized design space.')
