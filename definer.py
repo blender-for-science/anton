@@ -202,33 +202,41 @@ class Anton_OT_Definer(bpy.types.Operator):
 
         \\
         """
-        import gmsh_api.gmsh as gmsh
-
         scene = context.scene
         active_object = bpy.data.objects[scene.anton.filename]
 
-        fixed_faces = set()
-        non_design_faces = set()
+        fixed_faces = []
+        non_design_faces = []
         forced_faces = OrderedDict()
-        forced_directions = OrderedDict()
+        forced_directions = []
 
         if scene.anton.force_directioned:
             bpy.ops.object.mode_set(mode='OBJECT')
             for face in active_object.data.polygons:
                 if 'FIXED' in active_object.data.materials[face.material_index].name_full:
-                    # Adding 1 because of gmsh_api convention
-                    fixed_faces.add(face.index + 1)
+                    coords = []
+                    for _vertex_id in active_object.data.polygons[face.index].vertices[:]:
+                        coords.append(active_object.data.vertices[_vertex_id].co[:])
+
+                    fixed_faces.append(coords)
 
                 elif 'NONDESIGNSPACE' in active_object.data.materials[face.material_index].name_full:
-                    non_design_faces.add(face.index + 1)
+                    coords = []
+                    for _vertex_id in active_object.data.polygons[face.index].vertices[:]:
+                        coords.append(active_object.data.vertices[_vertex_id].co[:])
+
+                    non_design_faces.append(coords)
 
                 elif 'FORCE' in active_object.data.materials[face.material_index].name_full:
                     force_id = str(active_object.data.materials[face.material_index].name_full)
+                    coords = []
+                    for _vertex_id in active_object.data.polygons[face.index].vertices[:]:
+                        coords.append(active_object.data.vertices[_vertex_id].co[:])
 
                     if force_id not in forced_faces.keys():
-                        forced_faces[force_id] = set([face.index + 1])
+                        forced_faces[force_id] = [coords]
                     else:
-                        forced_faces[force_id].add(face.index + 1)
+                        forced_faces[force_id].append(coords)
 
             if bpy.context.mode != 'EDIT':
                 bpy.ops.object.mode_set(mode='EDIT')
@@ -243,113 +251,30 @@ class Anton_OT_Definer(bpy.types.Operator):
 
                 for edge in active_object.data.edges:
                     if edge.select:
-                        forced_directions['FORCE_{}'.format(i+1)] = edge.index + 1
+                        coords = []
+                        for _vertex_id in active_object.data.edges[edge.index].vertices[:]:
+                            coords.append(active_object.data.vertices[_vertex_id].co[:])
+
+                        forced_directions.append(self.compute_direction(coords))
 
                 bpy.ops.object.mode_set(mode='EDIT')
 
             bpy.ops.object.mode_set(mode='OBJECT')
+
+            forces = []
+            force_vectors = []
+            for i, _force_id in enumerate(forced_faces):
+                forces.append(forced_faces[_force_id])
+                force_vectors.append(scene.forced_magnitudes[_force_id] * scene.forced_direction_signs[_force_id] * forced_directions[i])
+
+            print(np.array(forces), np.array(force_vectors))
+
             self.report({'INFO'}, 'Fixed: {}, Non Design Space: {}, Force: {}'.format(
-                                                                                fixed_faces,
-                                                                                non_design_faces,
-                                                                                list(forced_faces.keys())))
-
-
-            data = self.get_raw_data(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.stl'))
-
-            points = OrderedDict()
-            edges = OrderedDict()
-            triangles = OrderedDict()
-            curve_loop = OrderedDict()
-
-            geo_points = OrderedDict()
-            geo_edges = OrderedDict()
-
-            i = 1
-            for _surface in data:
-                for _vertex in _surface:
-                    if _vertex not in points.keys():
-                        points[_vertex] = i
-                        geo_points[i] = _vertex
-                        i += 1
-
-            for i, _data in enumerate(data):
-                triangles[i+1] = [points[_data[0]], points[_data[1]], points[_data[2]]]
-
-            i = 1
-            for _triangle in triangles.values():
-                for _edge in self.get_edge_indices(_triangle):
-                    if _edge not in edges.keys() and _edge[::-1] not in edges.keys():
-                        edges[_edge] = i
-                        geo_edges[i] = _edge
-                        i += 1
-
-            for _triangle_id in triangles.keys():
-                curve_loop[_triangle_id] = []
-                for connection in self.get_curve_loop(triangles[_triangle_id]):
-                    if connection in edges.keys():
-                        curve_loop[_triangle_id].append(edges[connection])
-                    elif connection[::-1] in edges.keys():
-                        curve_loop[_triangle_id].append(-1*edges[connection[::-1]])
-
-            gmsh.initialize()
-            gmsh.option.setNumber('General.Terminal', 1)
-
-            nodes, elements, fixed_nodes, non_design_nodes, forced_nodes, directions, distributed_force = self.create_geo(
-                                                            scene.anton.workspace_path,
-                                                            scene.anton.filename,
-                                                            fixed_faces,
-                                                            non_design_faces,
-                                                            forced_faces,
-                                                            scene.forced_magnitudes,
-                                                            forced_directions,
-                                                            scene.forced_direction_signs,
-                                                            geo_points,
-                                                            geo_edges,
-                                                            points,
-                                                            edges,
-                                                            curve_loop,
-                                                            scene.anton.cl_max)
-
-            face_tags = np.array([[0, 1, 2], [0, 3, 1], [1, 3, 2], [2, 3, 0]], dtype=np.int)
-            faces = np.sort(elements[:, face_tags].reshape(4*len(elements), 3))
-            unique_faces, unique_count = np.unique(faces, return_counts=True, axis=0)
-            surface_faces = unique_faces[unique_count==1]
-
-            node_loads = OrderedDict()
-
-            for _force_id in forced_nodes.keys():
-                node_loads[_force_id] = OrderedDict()
-                for _forcefacenodes in forced_nodes[_force_id]:
-                    fnodes = set(_forcefacenodes)
-                    face_flags = [set(x).issubset(fnodes) for x in surface_faces]
-                    forced_elementfaces = surface_faces[face_flags]
-
-                    for _face in forced_elementfaces:
-                        _area = self.compute_area(nodes[_face])
-                        for _node in _face:
-                            if _node in node_loads[_force_id].keys():
-                                node_loads[_force_id][_node] += distributed_force[_force_id] * _area/3.0
-                            else:
-                                node_loads[_force_id][_node] = distributed_force[_force_id] * _area/3.0
-
-            for _force_id in directions.keys():
-                direction_vector = np.array(directions[_force_id])
-                for _node_id in node_loads[_force_id].keys():
-                    force_magnitude = node_loads[_force_id][_node_id]
-                    scene.load[int(_node_id)] = force_magnitude * direction_vector
-
-            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.nodes'), nodes)
-            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.elements'), elements)
-            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.fixed'),
-                        np.array(list(fixed_nodes), dtype=np.int))
-
-            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename+'.nds'),
-                        np.array(list(non_design_nodes), dtype=np.int))
-
-            gmsh.finalize()
+                                                                                len(fixed_faces),
+                                                                                len(non_design_faces),
+                                                                                len(forced_faces)))
 
             scene.anton.defined = True
-            self.report({'INFO'}, 'Nodes: {}, Elements: {}'.format(len(nodes), len(elements)))
             return {'FINISHED'}
 
         else:
