@@ -29,6 +29,8 @@ class Anton_OT_ForceUpdater(bpy.types.Operator):
         """
         scene = context.scene
         active_object = bpy.context.active_object
+        
+        bpy.ops.anton.initialize()
 
         if scene.anton.initialized:
             if 'NATIVE' not in bpy.data.materials:

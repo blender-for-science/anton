@@ -14,14 +14,6 @@ class Anton_PT_Panel(bpy.types.Panel):
         row = layout.row()
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, 'workspace_path')
-        rowsub = layout.row(align=True)
-        rowsub.prop(scene.anton, 'taichi_path')
-
-        col = layout.column()
-        col.operator('anton.initialize', text='Initialize')
-
-        row = layout.row()
-        row.label(text=" ")
 
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, "number_of_forces")
@@ -34,9 +26,6 @@ class Anton_PT_Panel(bpy.types.Panel):
             scene.forced_magnitudes['FORCE_{}'.format(item.name)] = item.magnitude
             row.operator('anton.directionupdate', icon='FULLSCREEN_ENTER').force_id = 'FORCE_{}'.format(item.name)
 
-        rowsub = layout.row(align=True)
-        rowsub.prop(scene.anton, "cl_max")
-
         col = layout.column()
         col.operator('anton.define', text='Define')
 
@@ -47,28 +36,18 @@ class Anton_PT_Panel(bpy.types.Panel):
         rowsub.prop(scene.anton, 'material')
 
         rowsub = layout.row(align=True)
-        rowsub.prop(scene.anton, "emin")
-        rowsub.prop(scene.anton, "density_change")
+        rowsub.prop(scene.anton, "res")
 
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, "volumina_ratio")
         rowsub.prop(scene.anton, "penalty_exponent")
 
         rowsub = layout.row(align=True)
-        rowsub.alignment = 'CENTER'
-        rowsub.prop(scene.anton, "density_filter")
-        rowsub.prop(scene.anton, "sensitivity_filter")
-
-        rowsub = layout.row(align=True)
-        rowsub.prop(scene.anton, "number_of_neighbours")
-        rowsub.prop(scene.anton, "rmin")
-
-        rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, 'number_of_iterations')
 
         rowsub = layout.row(align=True)
         rowsub.alignment = 'CENTER'
-        rowsub.prop(scene.anton, "include_fixed")
+        rowsub.prop(scene.anton, "narrowband")
         rowsub.prop(scene.anton, "include_forced")
 
         col = layout.column()
