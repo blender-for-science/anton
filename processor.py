@@ -174,7 +174,14 @@ class Anton_OT_Processor(bpy.types.Operator):
 
         scene = context.scene
         if scene.anton.defined:
-            subprocess.call(["python3", "./optimizer.py", scene.anton.workspace_path, scene.anton.filename, "100"])
+            subprocess.call(["python3", "./optimizer.py",
+                                scene.anton.workspace_path,
+                                scene.anton.filename,
+                                "{}".format(scene.anton.number_of_iterations),
+                                "{}".format(scene.anton.res),
+                                "{}".format(scene.anton.volumina_ratio),
+                                "{}".format(scene.anton.narrowband),
+                                "{}".format(scene.anton.include_forced)])
             return {'FINISHED'}
 
         else:

@@ -193,10 +193,12 @@ if __name__ == "__main__":
 
   workspace_path = sys.argv[1]
   filename = sys.argv[2]
+  max_iter = int(sys.argv[3])
+  n = int(sys.argv[4])
+  volume_fraction = float(sys.argv[5])
   version = 1
-  narrow_band = True
-  volume_fraction = 0.08
-  n = int(sys.argv[3])
+  narrow_band = sys.argv[6].lower() == 'true'
+  is_forced = sys.argv[7].lower() == 'true'
 
   fixed_faces = np.load(os.path.join(workspace_path, filename, 'fixed.npy'))
   force_faces = np.load(os.path.join(workspace_path, filename, 'forces.npy'))
@@ -208,9 +210,9 @@ if __name__ == "__main__":
                 scale=0.1,
                 version=version,
                 volume_fraction=volume_fraction,
-                max_iterations=15,
+                max_iterations=max_iter,
                 grid_update_start=5 if narrow_band else 1000000,
-                fix_cells_near_force=True,
+                fix_cells_near_force=is_forced,
                 fixed_cell_density=0.1)
 
   opt.import_mesh(filename=os.path.join(workspace_path, filename, filename + '.obj'), adaptive=False)

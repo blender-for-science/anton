@@ -93,82 +93,34 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 default='/tmp/',
                 subtype='DIR_PATH')
 
-        taichi_path : StringProperty(
-                name="",
-                description="Path to taichi folder",
-                default='/home/holycow/chi/taichi',
-                subtype='DIR_PATH')
-
         number_of_forces : IntProperty(
                 name="Forces",
                 default=1,
                 min=1,
                 description="Number of forces acting on the object")
 
-        cl_max : FloatProperty(
+        res : IntProperty(
                 name="",
-                default=0.2,
-                min=0.05,
-                max = 10.0,
-                precision=2,
-                description="Maximum size of tetrahedral element")
+                default=100,
+                min=10,
+                description="Resolution")
 
-        include_fixed : BoolProperty(
-                name='Fixed',
-                default=False,
-                description='Adds fixed faces to non-design space')
+        narrowband : BoolProperty(
+                name='Narrowband',
+                default=True,
+                description='Uses Narrowband optimization')
 
         include_forced : BoolProperty(
                 name='Forced',
                 default=False,
                 description='Adds forced faces to non-design space')
 
-        density_filter : BoolProperty(
-                name='Density',
-                default=False,
-                description='Applies a smoothing filter on densities')
-
-        sensitivity_filter : BoolProperty(
-                name='Sensitivity',
-                default=True,
-                description='Applies a smoothing filter to sensitivity')
-
-        number_of_neighbours : IntProperty(
-                name="",
-                default=10,
-                min=5,
-                description="Number of nearest neighbours for filtering")
-
-        rmin : FloatProperty(
-                name="",
-                default=0.2,
-                min=0.1,
-                max = 5.0,
-                precision=3,
-                description="Radius of neighbourhood")
-
-        density_change : FloatProperty(
-                name="",
-                default=0.2,
-                min=0.001,
-                max = 0.5,
-                precision=3,
-                description="Change in density per iteration")
-
-        emin : FloatProperty(
-                name="",
-                default=1,
-                min=0,
-                max = 2000,
-                precision=2,
-                description="Minimum allowable value of Young's modulus")
-
         volumina_ratio : FloatProperty(
                 name="",
                 default=0.4,
                 min=0.0,
                 max=1.0,
-                precision=3,
+                precision=2,
                 description="Ratio between the design space and solution space")
 
         penalty_exponent : FloatProperty(
