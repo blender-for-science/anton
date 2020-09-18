@@ -57,14 +57,8 @@ class Anton_PT_Panel(bpy.types.Panel):
         row.label(text=" ")
 
         rowsub = layout.row(align=True)
-        rowsub.prop(scene.anton, "metaballrad")
-        rowsub.prop(scene.anton, "metaballsens")
-        rowsub = layout.row(align=True)
-        rowsub.prop(scene.anton, 'keyframes')
-        rowsub.prop(scene.anton, 'slices')
-
-        rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, 'viz_iteration')
+        rowsub.prop(scene.anton, "density_out")
 
         col = layout.column()
         col.operator('anton.visualize', text='Visualize')

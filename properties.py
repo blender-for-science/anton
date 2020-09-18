@@ -137,39 +137,20 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 min=1,
                 description="Number of optimization iterations")
 
-        metaballrad : FloatProperty(
-                name="",
-                default=0.2,
-                min=0.1,
-                max = 5.0,
-                precision=2,
-                description="Radius of metaballs")
-
-        metaballsens : FloatProperty(
-                name="",
-                default=0.7,
-                min=0.1,
-                max = 10.0,
-                precision=2,
-                description="Sensitivity of metaballs")
-
-        keyframes : IntProperty(
-                name="",
-                default=30,
-                min=20,
-                description="Number of keyframes")
-
-        slices : IntProperty(
-                name="",
-                default=3,
-                min=1,
-                description="Number of instantiation points for animation")
-
         viz_iteration : IntProperty(
                 name="",
                 default=30,
                 min=1,
                 description="Iteration to visualize")
+
+        density_out : FloatProperty(
+                name="",
+                default=0.2,
+                min=0.1,
+                max=1.0,
+                precision=2,
+                description="Ratio between the design space and solution space")
+
 
         material : EnumProperty(
                 name='',
