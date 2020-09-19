@@ -146,7 +146,7 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
         density_out : FloatProperty(
                 name="",
                 default=0.2,
-                min=0.1,
+                min=0.0,
                 max=1.0,
                 precision=2,
                 description="Ratio between the design space and solution space")
