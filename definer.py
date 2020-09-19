@@ -282,7 +282,7 @@ class Anton_OT_Definer(bpy.types.Operator):
 
         else:
             scene.anton.defined = False
-            self.report({'ERROR'}, 'Problem ill-defined')
+            self.report({'ERROR'}, 'Forces yet to be defined')
             return {'CANCELLED'}
 
     @staticmethod

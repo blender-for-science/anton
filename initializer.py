@@ -68,7 +68,7 @@ class Anton_OT_ForceUpdater(bpy.types.Operator):
             return{'FINISHED'}
 
         else:
-            self.report({'ERROR'}, 'Initialize before force definition.')
+            self.report({'ERROR'}, 'Initialize before problem definition.')
             return{'CANCELLED'}
 
 class Anton_OT_Initializer(bpy.types.Operator):

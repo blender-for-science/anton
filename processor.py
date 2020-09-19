@@ -189,5 +189,5 @@ class Anton_OT_Processor(bpy.types.Operator):
             return {'FINISHED'}
 
         else:
-            self.report({'ERROR'}, '.inp file missing in {}'.format(scene.anton.workspace_path))
+            self.report({'ERROR'}, 'Problem ill-posed')
             return {'CANCELLED'}
