@@ -191,14 +191,21 @@ class TopoOpt(Simulation):
 
 if __name__ == "__main__":
 
+  version = 1
+  narrow_band = True
+  
   workspace_path = sys.argv[1]
   filename = sys.argv[2]
   max_iter = int(sys.argv[3])
   n = int(sys.argv[4])
   volume_fraction = float(sys.argv[5])
-  version = 1
-  narrow_band = sys.argv[6].lower() == 'true'
+  penalty = float(sys.argv[6])
   is_forced = sys.argv[7].lower() == 'true'
+  is_fixed = sys.argv[8].lower() == 'true'
+  nds_density = float(sys.argv[9])
+
+  youngs = float(sys.argv[10])
+  poisson = float(sys.argv[11])
 
   fixed_faces = np.load(os.path.join(workspace_path, filename, 'fixed.npy'))
   force_faces = np.load(os.path.join(workspace_path, filename, 'forces.npy'))
@@ -210,10 +217,15 @@ if __name__ == "__main__":
                 scale=0.1,
                 version=version,
                 volume_fraction=volume_fraction,
+                penalty=penalty,
+                use_youngs=True,
+                E=youngs,
+                nu=poisson,
                 max_iterations=max_iter,
                 grid_update_start=5 if narrow_band else 1000000,
                 fix_cells_near_force=is_forced,
-                fixed_cell_density=0.1)
+                fix_cells_at_dirichlet=is_fixed,
+                fixed_cell_density=nds_density)
 
   opt.import_mesh(filename=os.path.join(workspace_path, filename, filename + '.obj'), adaptive=False)
   opt.general_action(action='voxel_connectivity_filtering')

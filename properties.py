@@ -105,15 +105,23 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 min=10,
                 description="Resolution")
 
-        narrowband : BoolProperty(
-                name='Narrowband',
-                default=True,
-                description='Uses Narrowband optimization')
-
         include_forced : BoolProperty(
                 name='Forced',
                 default=False,
                 description='Adds forced faces to non-design space')
+
+        include_fixed : BoolProperty(
+                name='Fixed',
+                default=False,
+                description='Adds fixed faces to non-design space')
+
+        nds_density : FloatProperty(
+                name="",
+                default=0.1,
+                min=0.0,
+                max = 1.0,
+                precision=2,
+                description="Density of non-design space blocks")
 
         volumina_ratio : FloatProperty(
                 name="",

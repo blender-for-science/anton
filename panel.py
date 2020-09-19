@@ -43,12 +43,15 @@ class Anton_PT_Panel(bpy.types.Panel):
         rowsub.prop(scene.anton, "penalty_exponent")
 
         rowsub = layout.row(align=True)
+        rowsub.prop(scene.anton, 'nds_density')
+
+        rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, 'number_of_iterations')
 
         rowsub = layout.row(align=True)
         rowsub.alignment = 'CENTER'
-        rowsub.prop(scene.anton, "narrowband")
         rowsub.prop(scene.anton, "include_forced")
+        rowsub.prop(scene.anton, "include_fixed")
 
         col = layout.column()
         col.operator('anton.process', text='Generate')

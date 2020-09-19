@@ -180,8 +180,12 @@ class Anton_OT_Processor(bpy.types.Operator):
                                 "{}".format(scene.anton.number_of_iterations),
                                 "{}".format(scene.anton.res),
                                 "{}".format(scene.anton.volumina_ratio),
-                                "{}".format(scene.anton.narrowband),
-                                "{}".format(scene.anton.include_forced)])
+                                "{}".format(scene.anton.penalty_exponent),
+                                "{}".format(scene.anton.include_forced),
+                                "{}".format(scene.anton.include_fixed),
+                                "{}".format(scene.anton.nds_density),
+                                "{}".format(self.material_library[scene.anton.material]['YOUNGS']),
+                                "{}".format(self.material_library[scene.anton.material]['POISSON'])])
             return {'FINISHED'}
 
         else:

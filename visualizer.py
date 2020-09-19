@@ -37,6 +37,7 @@ class Anton_OT_Visualizer(bpy.types.Operator):
             bpy.ops.import_mesh.stl(filepath=stl_file, global_scale=1)
             bpy.ops.object.modifier_add(type='CORRECTIVE_SMOOTH')
             bpy.context.object.modifiers["CorrectiveSmooth"].factor = 1
+            bpy.context.object.modifiers["CorrectiveSmooth"].iterations = 1
             bpy.context.object.modifiers["CorrectiveSmooth"].scale = 0
 
             return {'FINISHED'}
