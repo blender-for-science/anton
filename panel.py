@@ -44,6 +44,7 @@ class Anton_PT_Panel(bpy.types.Panel):
 
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, 'nds_density')
+        rowsub.prop(scene.anton, 'precision')
 
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, 'number_of_iterations')

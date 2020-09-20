@@ -81,7 +81,7 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
         """
 
         initialized : BoolProperty(default=False)
-        forced : BoolProperty(default=False)
+        optimized : BoolProperty(default=False)
         force_directioned : BoolProperty(default=False)
         defined : BoolProperty(default=False)
 
@@ -137,6 +137,14 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 min=1.5,
                 max = 15.0,
                 precision=3,
+                description="Penalization factor for densities")
+
+        precision : FloatProperty(
+                name="",
+                default=0.00010,
+                min=0.00001,
+                max = 0.10000,
+                precision=5,
                 description="Penalization factor for densities")
 
         number_of_iterations : IntProperty(
