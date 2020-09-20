@@ -268,9 +268,9 @@ class Anton_OT_Definer(bpy.types.Operator):
                 forces.append(forced_faces[_force_id])
                 force_vectors.append(scene.forced_magnitudes[_force_id] * scene.forced_direction_signs[_force_id] * forced_directions[i])
 
-            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename, 'fixed.npy'), np.array(fixed_faces))
-            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename, 'forces.npy'), np.array(forces))
-            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename, 'force_vectors.npy'), np.array(force_vectors))
+            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename, 'fixed.npy'), np.array(fixed_faces), allow_pickle=True)
+            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename, 'forces.npy'), np.array(forces), allow_pickle=True)
+            np.save(os.path.join(scene.anton.workspace_path, scene.anton.filename, 'force_vectors.npy'), np.array(force_vectors), allow_pickle=True)
 
             self.report({'INFO'}, 'Fixed: {}, Non Design Space: {}, Force: {}'.format(
                                                                                 len(fixed_faces),

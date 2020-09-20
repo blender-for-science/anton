@@ -207,9 +207,11 @@ if __name__ == "__main__":
   youngs = float(sys.argv[10])
   poisson = float(sys.argv[11])
 
-  fixed_faces = np.load(os.path.join(workspace_path, filename, 'fixed.npy'))
-  force_faces = np.load(os.path.join(workspace_path, filename, 'forces.npy'))
-  force_vectors = np.load(os.path.join(workspace_path, filename, 'force_vectors.npy'))
+  precision = float(sys.argv[12])
+
+  fixed_faces = np.load(os.path.join(workspace_path, filename, 'fixed.npy'), allow_pickle=True)
+  force_faces = np.load(os.path.join(workspace_path, filename, 'forces.npy'), allow_pickle=True)
+  force_vectors = np.load(os.path.join(workspace_path, filename, 'force_vectors.npy'), allow_pickle=True)
 
   opt = TopoOpt(working_directory=workspace_path,
                 filename=filename,
@@ -231,10 +233,10 @@ if __name__ == "__main__":
   opt.general_action(action='voxel_connectivity_filtering')
 
   for _face in fixed_faces:
-    opt.add_customplane_dirichlet_bc(axis_to_fix="xyz", p0=_face[0], p1=_face[1], p2=_face[2])
+    opt.add_customplane_dirichlet_bc(axis_to_fix="xyz", p0=_face[0], p1=_face[1], p2=_face[2], thresh=0.0001)
 
   for i, _force in enumerate(force_faces):
     for _face in _force:
-      opt.add_customplane_load(force=force_vectors[i], p0=_face[0], p1=_face[1], p2=_face[2])
+      opt.add_customplane_load(force=force_vectors[i], p0=_face[0], p1=_face[1], p2=_face[2], thresh=0.0001)
 
   opt.run()
