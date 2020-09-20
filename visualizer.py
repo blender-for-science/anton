@@ -24,24 +24,30 @@ class Anton_OT_Visualizer(bpy.types.Operator):
         \\
         """
         scene = context.scene
-        last_modified = max(glob.glob(os.path.join(scene.anton.workspace_path, scene.anton.filename, 'output', '*/')), key=os.path.getmtime)
-        viz_file = os.path.join(last_modified, 'fem', "{:05d}.tcb.zip".format(scene.anton.viz_iteration - 1))
-        density_file = os.path.join(scene.anton.workspace_path, scene.anton.filename, '{:05d}.densities.txt'.format(scene.anton.viz_iteration - 1))
-        stl_file = os.path.join(scene.anton.workspace_path, scene.anton.filename, '{}_{:05d}.stl'.format(scene.anton.filename, scene.anton.viz_iteration))
 
-        os.system("ti run convert_fem_solve {} {}".format(viz_file, density_file))        
+        if scene.anton.optimized:
+            last_modified = max(glob.glob(os.path.join(scene.anton.workspace_path, scene.anton.filename, 'output', '*/')), key=os.path.getmtime)
+            viz_file = os.path.join(last_modified, 'fem', "{:05d}.tcb.zip".format(scene.anton.viz_iteration - 1))
+            density_file = os.path.join(scene.anton.workspace_path, scene.anton.filename, '{:05d}.densities.txt'.format(scene.anton.viz_iteration - 1))
+            stl_file = os.path.join(scene.anton.workspace_path, scene.anton.filename, '{}_{:05d}.stl'.format(scene.anton.filename, scene.anton.viz_iteration))
 
-        if os.path.isfile(density_file):
-            self.marchthecubes(inp_path=density_file, output_path=stl_file, resolution=scene.anton.res, density_thresh=scene.anton.density_out)
+            os.system("ti run convert_fem_solve {} {}".format(viz_file, density_file))        
 
-            bpy.ops.import_mesh.stl(filepath=stl_file, global_scale=1)
-            bpy.ops.object.modifier_add(type='CORRECTIVE_SMOOTH')
-            bpy.context.object.modifiers["CorrectiveSmooth"].factor = 1
-            bpy.context.object.modifiers["CorrectiveSmooth"].iterations = 1
-            bpy.context.object.modifiers["CorrectiveSmooth"].scale = 0
+            if os.path.isfile(density_file):
+                self.marchthecubes(inp_path=density_file, output_path=stl_file, resolution=scene.anton.res, density_thresh=scene.anton.density_out)
 
-            return {'FINISHED'}
+                bpy.ops.import_mesh.stl(filepath=stl_file, global_scale=1)
+                bpy.ops.object.modifier_add(type='CORRECTIVE_SMOOTH')
+                bpy.context.object.modifiers["CorrectiveSmooth"].factor = 1
+                bpy.context.object.modifiers["CorrectiveSmooth"].iterations = 1
+                bpy.context.object.modifiers["CorrectiveSmooth"].scale = 0
+
+                self.report({'INFO'}, 'Imported iteration: {}'.format(scene.anton.viz_iteration))
+                return {'FINISHED'}
+            else:
+                return {'CANCELLED'}
         else:
+            self.report({'ERROR'}, 'Generate results before visualization!')
             return {'CANCELLED'}
 
     @staticmethod
