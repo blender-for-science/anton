@@ -27,10 +27,9 @@ class Anton_OT_ForceUpdater(bpy.types.Operator):
 
         \\
         """
-        scene = context.scene
-        active_object = bpy.context.active_object
-        
+        scene = context.scene        
         bpy.ops.anton.initialize()
+        active_object = bpy.context.active_object
 
         if scene.anton.initialized:
             if 'NATIVE' not in bpy.data.materials:
@@ -120,6 +119,19 @@ class Anton_OT_Initializer(bpy.types.Operator):
                                     group_by_material=False,
                                     keep_vertex_order=True,
                                     global_scale=1, path_mode='AUTO')
+
+        active_object.select_set(True)
+        bpy.ops.object.delete()
+
+        bpy.ops.object.select_all(action='DESELECT')
+        bpy.ops.import_scene.obj(filepath=os.path.join(scene.anton.workspace_path, scene.anton.filename, scene.anton.filename + '.obj'),
+                                    axis_forward='Y',
+                                    axis_up='Z')
+
+        _temp_ob = bpy.context.selected_objects[0]
+        _temp_ob.name = scene.anton.filename
+
+        bpy.context.view_layer.objects.active = _temp_ob
 
         scene.anton.initialized = True
         self.report({'INFO'}, 'Initialized design space.')
