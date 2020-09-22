@@ -5,7 +5,7 @@ import glob
 
 class Anton_OT_Visualizer(bpy.types.Operator):
     bl_idname = 'anton.visualize'
-    bl_label = 'Anton_Visualizer'
+    bl_label = ''
     bl_description = 'Visualizes generated outcome'
 
     def execute(self, context):

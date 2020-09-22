@@ -24,7 +24,7 @@ class Anton_PT_Panel(bpy.types.Panel):
             row.label(text=' ')
             row.prop(item, 'magnitude')
             scene.forced_magnitudes['FORCE_{}'.format(item.name)] = item.magnitude
-            row.operator('anton.directionupdate', icon='FULLSCREEN_ENTER').force_id = 'FORCE_{}'.format(item.name)
+            row.operator('anton.directionupdate', icon='EMPTY_ARROWS').force_id = 'FORCE_{}'.format(item.name)
 
         col = layout.column()
         col.operator('anton.define', text='Define')
@@ -43,29 +43,23 @@ class Anton_PT_Panel(bpy.types.Panel):
         rowsub.prop(scene.anton, "penalty_exponent")
 
         rowsub = layout.row(align=True)
+        # rowsub.alignment = 'CENTER'
+        rowsub.prop(scene.anton, "include_forced")
+        rowsub.prop(scene.anton, "include_fixed")
         rowsub.prop(scene.anton, 'nds_density')
-        rowsub.prop(scene.anton, 'precision')
 
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, 'number_of_iterations')
-
-        rowsub = layout.row(align=True)
-        rowsub.alignment = 'CENTER'
-        rowsub.prop(scene.anton, "include_forced")
-        rowsub.prop(scene.anton, "include_fixed")
-
-        col = layout.column()
-        col.operator('anton.process', text='Generate')
+        rowsub.operator('anton.process', icon='PLAY')
 
         row = layout.row()
         row.label(text=" ")
 
         rowsub = layout.row(align=True)
-        rowsub.prop(scene.anton, 'viz_iteration')
         rowsub.prop(scene.anton, "density_out")
-
-        col = layout.column()
-        col.operator('anton.visualize', text='Visualize')
+        rowsub = layout.row(align=True)
+        rowsub.prop(scene.anton, 'viz_iteration')
+        rowsub.operator('anton.visualize', icon='SHADING_RENDERED')
 
         row = layout.row()
         row.label(text=" ")

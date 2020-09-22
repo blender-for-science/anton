@@ -5,7 +5,7 @@ import numpy as np
 
 class Anton_OT_Processor(bpy.types.Operator):
     bl_idname = 'anton.process'
-    bl_label = 'Anton_Processor'
+    bl_label = ''
     bl_description = 'Start Optimization'
 
     material_library = {'Steel-28Mn6': {'POISSON': 0.3, 'YOUNGS': 210000.0},
@@ -174,7 +174,7 @@ class Anton_OT_Processor(bpy.types.Operator):
 
         scene = context.scene
         if scene.anton.defined:
-            subprocess.call(["python3", "./optimizer.py",
+            subprocess.call(["python3", os.path.join(os.path.dirname(os.path.realpath(__file__)), "optimizer.py"),
                                 scene.anton.workspace_path,
                                 scene.anton.filename,
                                 "{}".format(scene.anton.number_of_iterations),
@@ -185,8 +185,7 @@ class Anton_OT_Processor(bpy.types.Operator):
                                 "{}".format(scene.anton.include_fixed),
                                 "{}".format(scene.anton.nds_density),
                                 "{}".format(self.material_library[scene.anton.material]['YOUNGS']),
-                                "{}".format(self.material_library[scene.anton.material]['POISSON']),
-                                "{}".format(scene.anton.precision)])
+                                "{}".format(self.material_library[scene.anton.material]['POISSON'])])
 
             scene.anton.optimized = True                                
             self.report({'INFO'}, 'Exported results to {}'.format(os.path.join(scene.anton.workspace_path, scene.anton.filename)))
