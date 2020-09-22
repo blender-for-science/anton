@@ -128,7 +128,7 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 default=0.4,
                 min=0.0,
                 max=1.0,
-                precision=2,
+                precision=3,
                 description="Ratio between the design space and solution space")
 
         penalty_exponent : FloatProperty(
@@ -137,14 +137,6 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 min=1.5,
                 max = 15.0,
                 precision=3,
-                description="Penalization factor for densities")
-
-        precision : FloatProperty(
-                name="",
-                default=0.00010,
-                min=0.00001,
-                max = 0.10000,
-                precision=5,
                 description="Penalization factor for densities")
 
         number_of_iterations : IntProperty(

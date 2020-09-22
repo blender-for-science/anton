@@ -154,11 +154,11 @@ class TopoOpt(Simulation):
   def add_load(self, center, force, size=1e-6):
     self.general_action('add_load', center=center, force=force, size=size)
 
-  def add_customplane_dirichlet_bc(self, axis_to_fix, p0, p1, p2, thresh=0.003):
-    self.general_action(action='add_customplane_dirichlet_bc', axis_to_fix=axis_to_fix, p0=tuple(p0), p1=tuple(p1), p2=tuple(p2), scale=self.scale, thresh=thresh)
+  def add_customplane_dirichlet_bc(self, axis_to_fix, p0, p1, p2):
+    self.general_action(action='add_customplane_dirichlet_bc', axis_to_fix=axis_to_fix, p0=tuple(p0), p1=tuple(p1), p2=tuple(p2), scale=self.scale)
 
-  def add_customplane_load(self, force, p0, p1, p2, thresh=0.003):
-    self.general_action(action='add_customplane_load', force=tuple(force), p0=tuple(p0), p1=tuple(p1), p2=tuple(p2), scale=self.scale, thresh=thresh)
+  def add_customplane_load(self, force, p0, p1, p2):
+    self.general_action(action='add_customplane_load', force=tuple(force), p0=tuple(p0), p1=tuple(p1), p2=tuple(p2), scale=self.scale)
 
   def add_plane_load(self, force, axis_to_search=None, axis=None, extreme=1, bound1=(-1, -1, -1), bound2=(1, 1, 1)):
     if axis_to_search is None:
@@ -207,8 +207,6 @@ if __name__ == "__main__":
   youngs = float(sys.argv[10])
   poisson = float(sys.argv[11])
 
-  precision = float(sys.argv[12])
-
   fixed_faces = np.load(os.path.join(workspace_path, filename, 'fixed.npy'), allow_pickle=True)
   force_faces = np.load(os.path.join(workspace_path, filename, 'forces.npy'), allow_pickle=True)
   force_vectors = np.load(os.path.join(workspace_path, filename, 'force_vectors.npy'), allow_pickle=True)
@@ -233,10 +231,10 @@ if __name__ == "__main__":
   opt.general_action(action='voxel_connectivity_filtering')
 
   for _face in fixed_faces:
-    opt.add_customplane_dirichlet_bc(axis_to_fix="xyz", p0=_face[0], p1=_face[1], p2=_face[2], thresh=0.0001)
+    opt.add_customplane_dirichlet_bc(axis_to_fix="xyz", p0=_face[0], p1=_face[1], p2=_face[2])
 
   for i, _force in enumerate(force_faces):
     for _face in _force:
-      opt.add_customplane_load(force=force_vectors[i], p0=_face[0], p1=_face[1], p2=_face[2], thresh=0.0001)
+      opt.add_customplane_load(force=force_vectors[i], p0=_face[0], p1=_face[1], p2=_face[2])
 
   opt.run()
