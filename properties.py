@@ -115,6 +115,15 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 default=False,
                 description='Adds fixed faces to non-design space')
 
+        mode : EnumProperty(
+                name='mode',
+                items=[
+                        ('NONE', 'None', 'Common Topology optimization'),
+                        ('NARROW', 'Narrow', 'Narrowband Topology optimization'),
+                        ('WIREFRAME', 'Wire', 'Wireframe-Narrowband Topology optimization')],
+                default='NARROW'
+        )
+
         nds_density : FloatProperty(
                 name="",
                 default=0.1,

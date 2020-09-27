@@ -185,9 +185,10 @@ class Anton_OT_Processor(bpy.types.Operator):
                                 "{}".format(scene.anton.include_fixed),
                                 "{}".format(scene.anton.nds_density),
                                 "{}".format(self.material_library[scene.anton.material]['YOUNGS']),
-                                "{}".format(self.material_library[scene.anton.material]['POISSON'])])
+                                "{}".format(self.material_library[scene.anton.material]['POISSON']),
+                                "{}".format(scene.anton.mode)])
 
-            scene.anton.optimized = True                                
+            scene.anton.optimized = True
             self.report({'INFO'}, 'Exported results to {}'.format(os.path.join(scene.anton.workspace_path, scene.anton.filename)))
             return {'FINISHED'}
 

@@ -192,7 +192,6 @@ class TopoOpt(Simulation):
 if __name__ == "__main__":
 
   version = 1
-  narrow_band = True
   
   workspace_path = sys.argv[1]
   filename = sys.argv[2]
@@ -206,6 +205,9 @@ if __name__ == "__main__":
 
   youngs = float(sys.argv[10])
   poisson = float(sys.argv[11])
+
+  wireframe = sys.argv[12].lower() == 'wireframe'
+  narrow_band = sys.argv[12].lower() == 'narrow'
 
   fixed_faces = np.load(os.path.join(workspace_path, filename, 'fixed.npy'), allow_pickle=True)
   force_faces = np.load(os.path.join(workspace_path, filename, 'forces.npy'), allow_pickle=True)

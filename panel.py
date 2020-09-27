@@ -38,6 +38,11 @@ class Anton_PT_Panel(bpy.types.Panel):
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, "res")
 
+        row = layout.row(align=True)
+        row.prop(scene.anton, "mode", icon='NONE', expand=True,
+                    slider=True, toggle=False, icon_only=False, event=False,
+                    full_event=False, emboss=True)
+
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, "volumina_ratio")
         rowsub.prop(scene.anton, "penalty_exponent")
