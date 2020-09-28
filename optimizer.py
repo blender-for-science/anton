@@ -207,7 +207,23 @@ if __name__ == "__main__":
   poisson = float(sys.argv[11])
 
   wireframe = sys.argv[12].lower() == 'wireframe'
-  narrow_band = sys.argv[12].lower() == 'narrow'
+  narrow_band = True
+
+  wgridsize = int(sys.argv[13])
+  wthickness = int(sys.argv[14])
+
+  #ADVANCED PARAMS
+  mindens = float(sys.argv[15])
+  minstiff = float(sys.argv[16])
+  frac2keep = float(sys.argv[17])
+  cgtolerance = float(sys.argv[18])
+  activthresh = float(sys.argv[19])
+  cgmaxiterations = int(sys.argv[20])
+  boundarysmoothingiters = int(sys.argv[21])
+  interiorsmoothingiters = int(sys.argv[22])
+  objthresh = float(sys.argv[23])
+  steplimit = float(sys.argv[24])
+  exfixed = sys.argv[25].lower() == 'true'
 
   fixed_faces = np.load(os.path.join(workspace_path, filename, 'fixed.npy'), allow_pickle=True)
   force_faces = np.load(os.path.join(workspace_path, filename, 'forces.npy'), allow_pickle=True)
@@ -218,16 +234,30 @@ if __name__ == "__main__":
                 res=(n, n, n),
                 scale=0.1,
                 version=version,
+                wireframe=wireframe,
                 volume_fraction=volume_fraction,
                 penalty=penalty,
                 use_youngs=True,
                 E=youngs,
                 nu=poisson,
                 max_iterations=max_iter,
+                wireframe_grid_size=wgridsize,
+                wireframe_thickness=wthickness,
                 grid_update_start=5 if narrow_band else 1000000,
                 fix_cells_near_force=is_forced,
                 fix_cells_at_dirichlet=is_fixed,
-                fixed_cell_density=nds_density)
+                fixed_cell_density=nds_density,
+                minimum_density=mindens,
+                minimum_stiffness=minstiff,
+                fraction_to_keep=frac2keep,
+                cg_tolerance=cgtolerance,
+                active_threshold=activthresh,
+                cg_max_iterations=cgmaxiterations,
+                boundary_smoothing_iters=boundarysmoothingiters,
+                smoothing_iters=interiorsmoothingiters,
+                objective_threshold=objthresh,
+                step_limit=steplimit,
+                exclude_fixed_cells=exfixed)
 
   opt.import_mesh(filename=os.path.join(workspace_path, filename, filename + '.obj'), adaptive=False)
   opt.general_action(action='voxel_connectivity_filtering')

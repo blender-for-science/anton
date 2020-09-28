@@ -115,10 +115,14 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 default=False,
                 description='Adds fixed faces to non-design space')
 
+        advanced_params : BoolProperty(
+                name='Advanced',
+                default=False,
+                description='Tweak advanced solver params')
+
         mode : EnumProperty(
                 name='mode',
                 items=[
-                        ('NONE', 'None', 'Common Topology optimization'),
                         ('NARROW', 'Narrow', 'Narrowband Topology optimization'),
                         ('WIREFRAME', 'Wire', 'Wireframe-Narrowband Topology optimization')],
                 default='NARROW'
@@ -131,6 +135,20 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 max = 1.0,
                 precision=2,
                 description="Density of non-design space blocks")
+
+        wireframe_gridsize : IntProperty(
+                name="",
+                default=32,
+                min=1,
+                max=100,
+                description="Grid size for wireframe")
+
+        wireframe_thickness : IntProperty(
+                name="",
+                default=4,
+                min=1,
+                max=100,
+                description="Thickness of wireframe")
 
         volumina_ratio : FloatProperty(
                 name="",
@@ -168,6 +186,82 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 precision=2,
                 description="Ratio between the design space and solution space")
 
+
+        #ADVANCED PARAMS
+        minimum_density : FloatProperty(
+                name="",
+                default=0.0,
+                min=0.0,
+                max=1.0,
+                description="Minimum allowable density")        
+
+        minimum_stiffness : FloatProperty(
+                name="",
+                default=1e-9,
+                min=0.0,
+                max=1.0,
+                description="Minimum allowable stiffness")
+
+        fraction_to_keep : FloatProperty(
+                name="",
+                default=1.0,
+                min=0.0,
+                max=1.0,
+                description="Fraction to keep during optimization")
+
+        cg_tolerance : FloatProperty(
+                name="",
+                default=1e-4,
+                min=0.0,
+                max=1.0,
+                description="CG Tolerance")
+
+        active_threshold : FloatProperty(
+                name="",
+                default=1e-6,
+                min=0.0,
+                max=1.0,
+                description="Active threshold")
+
+        cg_max_iterations : IntProperty(
+                name="",
+                default=50,
+                min=1,
+                max=100,
+                description="CG Max iterations")
+
+        boundary_smoothing_iters : IntProperty(
+                name="",
+                default=3,
+                min=1,
+                max=100,
+                description="Boundary smoothing iterations")
+
+        smoothing_iters : IntProperty(
+                name="",
+                default=1,
+                min=1,
+                max=100,
+                description="Interior smoothing iterations")
+
+        objective_threshold : FloatProperty(
+                name="",
+                default=0.5,
+                min=0.0,
+                max=1.0,
+                description="Objective threshold")                                                                                                
+
+        step_limit : FloatProperty(
+                name="",
+                default=0.2,
+                min=0.0,
+                max=1.0,
+                description="Step limit")
+
+        exclude_fixed_cells : BoolProperty(
+                name='Exclude Fixed-cells',
+                default=True,
+                description='Exclude fixed cells during optimization')
 
         material : EnumProperty(
                 name='',

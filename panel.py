@@ -1,4 +1,5 @@
 import bpy
+from bpy.props import BoolProperty
 
 class Anton_PT_Panel(bpy.types.Panel):
     bl_idname = 'ANTON_PT_panel'
@@ -43,28 +44,61 @@ class Anton_PT_Panel(bpy.types.Panel):
                     slider=True, toggle=False, icon_only=False, event=False,
                     full_event=False, emboss=True)
 
+        if scene.anton.mode == 'WIREFRAME':
+            row = layout.row(align=True)
+            row.prop(scene.anton, "wireframe_thickness")
+            row.prop(scene.anton, "wireframe_gridsize")
+
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, "volumina_ratio")
         rowsub.prop(scene.anton, "penalty_exponent")
 
         rowsub = layout.row(align=True)
-        # rowsub.alignment = 'CENTER'
+        rowsub.alignment = 'CENTER'
         rowsub.prop(scene.anton, "include_forced")
         rowsub.prop(scene.anton, "include_fixed")
-        rowsub.prop(scene.anton, 'nds_density')
+
+        if scene.anton.include_fixed or scene.anton.include_forced:
+            rowsub = layout.row(align=True)
+            rowsub.prop(scene.anton, 'nds_density')
 
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, 'number_of_iterations')
-        rowsub.operator('anton.process', icon='PLAY')
+
+        rowsub = layout.row(align=True)
+        rowsub.alignment = 'CENTER'
+        rowsub.prop(scene.anton, "advanced_params")
+
+        if scene.anton.advanced_params:
+            rowsub = layout.row(align=True)
+            rowsub.prop(scene.anton, "objective_threshold")
+            rowsub.prop(scene.anton, "step_limit")
+            rowsub = layout.row(align=True)
+            rowsub.prop(scene.anton, "fraction_to_keep")
+            rowsub.prop(scene.anton, "cg_tolerance")
+            rowsub.prop(scene.anton, "active_threshold")
+            rowsub = layout.row(align=True)
+            rowsub.prop(scene.anton, "cg_max_iterations")
+            rowsub.prop(scene.anton, "boundary_smoothing_iters")
+            rowsub.prop(scene.anton, "smoothing_iters")
+            rowsub = layout.row(align=True)
+            rowsub.prop(scene.anton, "minimum_density")
+            rowsub.prop(scene.anton, "minimum_stiffness")            
+            rowsub = layout.row(align=True)
+            rowsub.alignment = 'CENTER'
+            rowsub.prop(scene.anton, "exclude_fixed_cells")
+
+        rowsub = layout.row(align=True)
+        rowsub.operator('anton.process')
 
         row = layout.row()
         row.label(text=" ")
 
         rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, "density_out")
-        rowsub = layout.row(align=True)
         rowsub.prop(scene.anton, 'viz_iteration')
-        rowsub.operator('anton.visualize', icon='SHADING_RENDERED')
+        rowsub = layout.row(align=True)
+        rowsub.operator('anton.visualize')
 
         row = layout.row()
         row.label(text=" ")

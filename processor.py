@@ -5,7 +5,7 @@ import numpy as np
 
 class Anton_OT_Processor(bpy.types.Operator):
     bl_idname = 'anton.process'
-    bl_label = ''
+    bl_label = 'Generate'
     bl_description = 'Start Optimization'
 
     material_library = {'Steel-28Mn6': {'POISSON': 0.3, 'YOUNGS': 210000.0},
@@ -186,7 +186,20 @@ class Anton_OT_Processor(bpy.types.Operator):
                                 "{}".format(scene.anton.nds_density),
                                 "{}".format(self.material_library[scene.anton.material]['YOUNGS']),
                                 "{}".format(self.material_library[scene.anton.material]['POISSON']),
-                                "{}".format(scene.anton.mode)])
+                                "{}".format(scene.anton.mode),
+                                "{}".format(scene.anton.wireframe_gridsize),
+                                "{}".format(scene.anton.wireframe_thickness),
+                                "{}".format(scene.anton.minimum_density),
+                                "{}".format(scene.anton.minimum_stiffness),
+                                "{}".format(scene.anton.fraction_to_keep),
+                                "{}".format(scene.anton.cg_tolerance),
+                                "{}".format(scene.anton.active_threshold),
+                                "{}".format(scene.anton.cg_max_iterations),
+                                "{}".format(scene.anton.boundary_smoothing_iters),
+                                "{}".format(scene.anton.smoothing_iters),
+                                "{}".format(scene.anton.objective_threshold),
+                                "{}".format(scene.anton.step_limit),
+                                "{}".format(scene.anton.exclude_fixed_cells)])
 
             scene.anton.optimized = True
             self.report({'INFO'}, 'Exported results to {}'.format(os.path.join(scene.anton.workspace_path, scene.anton.filename)))
