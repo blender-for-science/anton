@@ -154,11 +154,11 @@ class TopoOpt(Simulation):
   def add_load(self, center, force, size=1e-6):
     self.general_action('add_load', center=center, force=force, size=size)
 
-  def add_customplane_dirichlet_bc(self, axis_to_fix, p0, p1, p2):
-    self.general_action(action='add_customnodes_dirichlet_bc', axis_to_fix=axis_to_fix, p0=tuple(p0), p1=tuple(p1), p2=tuple(p2), scale=self.scale)
+  def add_customplane_dirichlet_bc(self, axis_to_fix, p0, p1, p2, thresh=0.00001):
+    self.general_action(action='add_customnodes_dirichlet_bc', axis_to_fix=axis_to_fix, p0=tuple(p0), p1=tuple(p1), p2=tuple(p2), scale=self.scale, epsilon=thresh)
 
-  def add_customplane_load(self, force, p0, p1, p2):
-    self.general_action(action='add_customplane_load', force=tuple(force), p0=tuple(p0), p1=tuple(p1), p2=tuple(p2), scale=self.scale)
+  def add_customplane_load(self, force, p0, p1, p2, thresh=0.00001):
+    self.general_action(action='add_customplane_load', force=tuple(force), p0=tuple(p0), p1=tuple(p1), p2=tuple(p2), scale=self.scale, epsilon=thresh)
 
   def add_plane_load(self, force, axis_to_search=None, axis=None, extreme=1, bound1=(-1, -1, -1), bound2=(1, 1, 1)):
     if axis_to_search is None:
@@ -224,49 +224,72 @@ if __name__ == "__main__":
   objthresh = float(sys.argv[23])
   steplimit = float(sys.argv[24])
   exfixed = sys.argv[25].lower() == 'true'
+  fixed_epsilon = float(sys.argv[26])
+  forced_epsilon = float(sys.argv[27])
+  advanced = sys.argv[28].lower() == 'true'
 
   fixed_faces = np.load(os.path.join(workspace_path, filename, 'fixed.npy'), allow_pickle=True)
   force_faces = np.load(os.path.join(workspace_path, filename, 'forces.npy'), allow_pickle=True)
   force_vectors = np.load(os.path.join(workspace_path, filename, 'force_vectors.npy'), allow_pickle=True)
 
-  opt = TopoOpt(working_directory=workspace_path,
-                filename=filename,
-                res=(n, n, n),
-                scale=0.1,
-                version=version,
-                wireframe=wireframe,
-                volume_fraction=volume_fraction,
-                penalty=penalty,
-                use_youngs=True,
-                E=youngs,
-                nu=poisson,
-                max_iterations=max_iter,
-                wireframe_grid_size=wgridsize,
-                wireframe_thickness=wthickness,
-                grid_update_start=5 if narrow_band else 1000000,
-                fix_cells_near_force=is_forced,
-                fix_cells_at_dirichlet=is_fixed,
-                fixed_cell_density=nds_density,
-                minimum_density=mindens,
-                minimum_stiffness=minstiff,
-                fraction_to_keep=frac2keep,
-                cg_tolerance=cgtolerance,
-                active_threshold=activthresh,
-                cg_max_iterations=cgmaxiterations,
-                boundary_smoothing_iters=boundarysmoothingiters,
-                smoothing_iters=interiorsmoothingiters,
-                objective_threshold=objthresh,
-                step_limit=steplimit,
-                exclude_fixed_cells=exfixed)
+  if advanced:
+    opt = TopoOpt(working_directory=workspace_path,
+                  filename=filename,
+                  res=(n, n, n),
+                  scale=0.1,
+                  version=version,
+                  wireframe=wireframe,
+                  volume_fraction=volume_fraction,
+                  penalty=penalty,
+                  use_youngs=True,
+                  E=youngs,
+                  nu=poisson,
+                  max_iterations=max_iter,
+                  wireframe_grid_size=wgridsize,
+                  wireframe_thickness=wthickness,
+                  grid_update_start=5 if narrow_band else 1000000,
+                  fix_cells_near_force=is_forced,
+                  fix_cells_at_dirichlet=is_fixed,
+                  fixed_cell_density=nds_density,
+                  minimum_density=mindens,
+                  minimum_stiffness=minstiff,
+                  fraction_to_keep=frac2keep,
+                  cg_tolerance=cgtolerance,
+                  active_threshold=activthresh,
+                  cg_max_iterations=cgmaxiterations,
+                  boundary_smoothing_iters=boundarysmoothingiters,
+                  smoothing_iters=interiorsmoothingiters,
+                  objective_threshold=objthresh,
+                  step_limit=steplimit,
+                  exclude_fixed_cells=exfixed)
+  else:
+    opt = TopoOpt(working_directory=workspace_path,
+                  filename=filename,
+                  res=(n, n, n),
+                  scale=0.1,
+                  version=version,
+                  wireframe=wireframe,
+                  volume_fraction=volume_fraction,
+                  penalty=penalty,
+                  use_youngs=True,
+                  E=youngs,
+                  nu=poisson,
+                  max_iterations=max_iter,
+                  wireframe_grid_size=wgridsize,
+                  wireframe_thickness=wthickness,                  
+                  grid_update_start=5 if narrow_band else 1000000,
+                  fix_cells_near_force=is_forced,
+                  fix_cells_at_dirichlet=is_fixed,
+                  fixed_cell_density=nds_density)
 
   opt.import_mesh(filename=os.path.join(workspace_path, filename, filename + '.obj'), adaptive=False)
   opt.general_action(action='voxel_connectivity_filtering')
 
   for _face in fixed_faces:
-    opt.add_customplane_dirichlet_bc(axis_to_fix="xyz", p0=_face[0], p1=_face[1], p2=_face[2])
+    opt.add_customplane_dirichlet_bc(axis_to_fix="xyz", p0=_face[0], p1=_face[1], p2=_face[2], thresh=fixed_epsilon)
 
   for i, _force in enumerate(force_faces):
     for _face in _force:
-      opt.add_customplane_load(force=force_vectors[i], p0=_face[0], p1=_face[1], p2=_face[2])
+      opt.add_customplane_load(force=force_vectors[i], p0=_face[0], p1=_face[1], p2=_face[2], thresh=forced_epsilon)
 
   opt.run()

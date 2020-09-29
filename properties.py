@@ -136,6 +136,22 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 precision=2,
                 description="Density of non-design space blocks")
 
+        fixed_threshold : FloatProperty(
+                name="",
+                default=0.00001,
+                min=0.0,
+                max = 1.0,
+                precision=6,
+                description="Search threshold for fixed cells")
+
+        forced_threshold : FloatProperty(
+                name="",
+                default=0.00001,
+                min=0.0,
+                max = 1.0,
+                precision=6,
+                description="Search threshold for forced nodes")
+
         wireframe_gridsize : IntProperty(
                 name="",
                 default=32,

@@ -199,7 +199,10 @@ class Anton_OT_Processor(bpy.types.Operator):
                                 "{}".format(scene.anton.smoothing_iters),
                                 "{}".format(scene.anton.objective_threshold),
                                 "{}".format(scene.anton.step_limit),
-                                "{}".format(scene.anton.exclude_fixed_cells)])
+                                "{}".format(scene.anton.exclude_fixed_cells),
+                                "{}".format(scene.anton.fixed_threshold),
+                                "{}".format(scene.anton.forced_threshold),
+                                "{}".format(scene.anton.advanced_params)])
 
             scene.anton.optimized = True
             self.report({'INFO'}, 'Exported results to {}'.format(os.path.join(scene.anton.workspace_path, scene.anton.filename)))

@@ -54,6 +54,10 @@ class Anton_PT_Panel(bpy.types.Panel):
         rowsub.prop(scene.anton, "penalty_exponent")
 
         rowsub = layout.row(align=True)
+        rowsub.prop(scene.anton, "fixed_threshold")
+        rowsub.prop(scene.anton, "forced_threshold")
+
+        rowsub = layout.row(align=True)
         rowsub.alignment = 'CENTER'
         rowsub.prop(scene.anton, "include_forced")
         rowsub.prop(scene.anton, "include_fixed")
