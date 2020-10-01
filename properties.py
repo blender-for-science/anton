@@ -81,7 +81,7 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
         """
 
         initialized : BoolProperty(default=False)
-        forced : BoolProperty(default=False)
+        optimized : BoolProperty(default=False)
         force_directioned : BoolProperty(default=False)
         defined : BoolProperty(default=False)
 
@@ -99,63 +99,72 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 min=1,
                 description="Number of forces acting on the object")
 
-        cl_max : FloatProperty(
+        res : IntProperty(
                 name="",
-                default=0.2,
-                min=0.05,
-                max = 10.0,
-                precision=2,
-                description="Maximum size of tetrahedral element")
-
-        include_fixed : BoolProperty(
-                name='Fixed',
-                default=False,
-                description='Adds fixed faces to non-design space')
+                default=100,
+                min=10,
+                description="Resolution")
 
         include_forced : BoolProperty(
                 name='Forced',
                 default=False,
                 description='Adds forced faces to non-design space')
 
-        density_filter : BoolProperty(
-                name='Density',
+        include_fixed : BoolProperty(
+                name='Fixed',
                 default=False,
-                description='Applies a smoothing filter on densities')
+                description='Adds fixed faces to non-design space')
 
-        sensitivity_filter : BoolProperty(
-                name='Sensitivity',
-                default=True,
-                description='Applies a smoothing filter to sensitivity')
+        advanced_params : BoolProperty(
+                name='Advanced',
+                default=False,
+                description='Tweak advanced solver params')
 
-        number_of_neighbours : IntProperty(
+        mode : EnumProperty(
+                name='mode',
+                items=[
+                        ('NARROW', 'Narrow', 'Narrowband Topology optimization'),
+                        ('WIREFRAME', 'Wire', 'Wireframe-Narrowband Topology optimization')],
+                default='NARROW'
+        )
+
+        nds_density : FloatProperty(
                 name="",
-                default=10,
-                min=5,
-                description="Number of nearest neighbours for filtering")
-
-        rmin : FloatProperty(
-                name="",
-                default=0.2,
-                min=0.1,
-                max = 5.0,
-                precision=3,
-                description="Radius of neighbourhood")
-
-        density_change : FloatProperty(
-                name="",
-                default=0.2,
-                min=0.001,
-                max = 0.5,
-                precision=3,
-                description="Change in density per iteration")
-
-        emin : FloatProperty(
-                name="",
-                default=1,
-                min=0,
-                max = 2000,
+                default=0.1,
+                min=0.0,
+                max = 1.0,
                 precision=2,
-                description="Minimum allowable value of Young's modulus")
+                description="Density of non-design space blocks")
+
+        fixed_threshold : FloatProperty(
+                name="",
+                default=0.00001,
+                min=0.0,
+                max = 1.0,
+                precision=6,
+                description="Search threshold for fixed cells")
+
+        forced_threshold : FloatProperty(
+                name="",
+                default=0.00001,
+                min=0.0,
+                max = 1.0,
+                precision=6,
+                description="Search threshold for forced nodes")
+
+        wireframe_gridsize : IntProperty(
+                name="",
+                default=32,
+                min=1,
+                max=100,
+                description="Grid size for wireframe")
+
+        wireframe_thickness : IntProperty(
+                name="",
+                default=4,
+                min=1,
+                max=100,
+                description="Thickness of wireframe")
 
         volumina_ratio : FloatProperty(
                 name="",
@@ -179,39 +188,96 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 min=1,
                 description="Number of optimization iterations")
 
-        metaballrad : FloatProperty(
-                name="",
-                default=0.2,
-                min=0.1,
-                max = 5.0,
-                precision=2,
-                description="Radius of metaballs")
-
-        metaballsens : FloatProperty(
-                name="",
-                default=0.7,
-                min=0.1,
-                max = 10.0,
-                precision=2,
-                description="Sensitivity of metaballs")
-
-        keyframes : IntProperty(
-                name="",
-                default=30,
-                min=20,
-                description="Number of keyframes")
-
-        slices : IntProperty(
-                name="",
-                default=3,
-                min=1,
-                description="Number of instantiation points for animation")
-
         viz_iteration : IntProperty(
                 name="",
                 default=30,
                 min=1,
                 description="Iteration to visualize")
+
+        density_out : FloatProperty(
+                name="",
+                default=0.2,
+                min=0.0,
+                max=1.0,
+                precision=2,
+                description="Ratio between the design space and solution space")
+
+
+        #ADVANCED PARAMS
+        minimum_density : FloatProperty(
+                name="",
+                default=0.0,
+                min=0.0,
+                max=1.0,
+                description="Minimum allowable density")        
+
+        minimum_stiffness : FloatProperty(
+                name="",
+                default=1e-9,
+                min=0.0,
+                max=1.0,
+                description="Minimum allowable stiffness")
+
+        fraction_to_keep : FloatProperty(
+                name="",
+                default=1.0,
+                min=0.0,
+                max=1.0,
+                description="Fraction to keep during optimization")
+
+        cg_tolerance : FloatProperty(
+                name="",
+                default=1e-4,
+                min=0.0,
+                max=1.0,
+                description="CG Tolerance")
+
+        active_threshold : FloatProperty(
+                name="",
+                default=1e-6,
+                min=0.0,
+                max=1.0,
+                description="Active threshold")
+
+        cg_max_iterations : IntProperty(
+                name="",
+                default=50,
+                min=1,
+                max=100,
+                description="CG Max iterations")
+
+        boundary_smoothing_iters : IntProperty(
+                name="",
+                default=3,
+                min=1,
+                max=100,
+                description="Boundary smoothing iterations")
+
+        smoothing_iters : IntProperty(
+                name="",
+                default=1,
+                min=1,
+                max=100,
+                description="Interior smoothing iterations")
+
+        objective_threshold : FloatProperty(
+                name="",
+                default=0.5,
+                min=0.0,
+                max=1.0,
+                description="Objective threshold")                                                                                                
+
+        step_limit : FloatProperty(
+                name="",
+                default=0.2,
+                min=0.0,
+                max=1.0,
+                description="Step limit")
+
+        exclude_fixed_cells : BoolProperty(
+                name='Exclude Fixed-cells',
+                default=True,
+                description='Exclude fixed cells during optimization')
 
         material : EnumProperty(
                 name='',

@@ -27,7 +27,8 @@ class Anton_OT_ForceUpdater(bpy.types.Operator):
 
         \\
         """
-        scene = context.scene
+        scene = context.scene        
+        bpy.ops.anton.initialize()
         active_object = bpy.context.active_object
 
         if scene.anton.initialized:
@@ -66,7 +67,7 @@ class Anton_OT_ForceUpdater(bpy.types.Operator):
             return{'FINISHED'}
 
         else:
-            self.report({'ERROR'}, 'Initialize before force definition.')
+            self.report({'ERROR'}, 'Initialize before problem definition.')
             return{'CANCELLED'}
 
 class Anton_OT_Initializer(bpy.types.Operator):
@@ -90,20 +91,48 @@ class Anton_OT_Initializer(bpy.types.Operator):
         active_object = bpy.context.active_object
         bpy.context.space_data.shading.type = 'MATERIAL'
 
-        if not scene.anton.defined:
-            scene.anton.filename = active_object.name
+        scene.anton.filename = active_object.name
 
-            bpy.ops.export_mesh.stl(filepath=os.path.join(scene.anton.workspace_path, scene.anton.filename + '.stl'), ascii=True)
-            active_object.select_set(True)
-            bpy.ops.object.delete()
+        if not os.path.exists(os.path.join(scene.anton.workspace_path, scene.anton.filename)):
+            os.makedirs(os.path.join(scene.anton.workspace_path, scene.anton.filename))
 
-            bpy.ops.import_mesh.stl(filepath=os.path.join(scene.anton.workspace_path, scene.anton.filename + '.stl'))
+        # subprocess.call(["python3", os.path.join(scene.anton.taichi_path, "projects/spgrid_topo_opt/scripts/opt_anton.py")])
 
-            active_object = bpy.context.active_object
+        bpy.ops.object.modifier_add(type='TRIANGULATE')
+        bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Triangulate")
+        bpy.ops.export_scene.obj(filepath=os.path.join(scene.anton.workspace_path, scene.anton.filename, scene.anton.filename + '.obj'), 
+                                    check_existing=True,
+                                    axis_forward='Y',
+                                    axis_up='Z',
+                                    filter_glob="*.obj;*.mtl",
+                                    use_selection=False,
+                                    use_animation=False,
+                                    use_mesh_modifiers=True,
+                                    use_normals=False,
+                                    use_uvs=False,
+                                    use_materials=False,
+                                    use_triangles=True,
+                                    use_nurbs=False,
+                                    use_vertex_groups=False,
+                                    use_blen_objects=True,
+                                    group_by_object=False,
+                                    group_by_material=False,
+                                    keep_vertex_order=True,
+                                    global_scale=1, path_mode='AUTO')
 
-            scene.anton.initialized = True
-            self.report({'INFO'}, 'Initialized design space.')
-            return {'FINISHED'}
-        else:
-            self.report({'ERROR'}, 'Design space has already been initialized. In order to re-initialize, kindly restart the process.')
-            return {'CANCELLED'}
+        active_object.select_set(True)
+        bpy.ops.object.delete()
+
+        bpy.ops.object.select_all(action='DESELECT')
+        bpy.ops.import_scene.obj(filepath=os.path.join(scene.anton.workspace_path, scene.anton.filename, scene.anton.filename + '.obj'),
+                                    axis_forward='Y',
+                                    axis_up='Z')
+
+        _temp_ob = bpy.context.selected_objects[0]
+        _temp_ob.name = scene.anton.filename
+
+        bpy.context.view_layer.objects.active = _temp_ob
+
+        scene.anton.initialized = True
+        self.report({'INFO'}, 'Initialized design space.')
+        return {'FINISHED'}
