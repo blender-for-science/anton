@@ -10,17 +10,18 @@
 
 ``anton`` is an open-source generative design framework built on Blender, the open-source 3D creation suite. At its current stage of development, anton uses a narrow-band topology optimization methodology as a design generator and uses implicit surfaces for mesh generation.
 
-## Installation
-* Download the latest release
-* Open Blender and head over to ``Edit`` -> ``Preferences`` -> ``Add-ons`` -> ``Install``
-* Navigate to the downloaded **.zip** file and click ``Install Add-on``
-* Enable the installed add-on, anton looks for the these python modules,
+## Dependencies
+* ``taichi-build`` requires [spgrid_topo_opt](https://github.com/imsenthur/spgrid_topo_opt), a Narrow-Band Topology Optimization framework developed by [Haixiang Liu (University of Wisconsin-Madison)](http://pages.cs.wisc.edu/~cslhxac/), [Yuanming Hu (MIT CSAIL)](http://taichi.graphics/me/), [Bo Zhu (Dartmouth College)](http://www.dartmouth.edu/~boolzhu/), [Wojciech Matusik (MIT CSAIL)](https://cdfg.csail.mit.edu/wojciech), [Eftychios Sifakis (University of Wisconsin-Madison)](http://pages.cs.wisc.edu/~sifakis/).
+* The following python modules are also required:
     * ``Numpy``
     * ``Scipy``
     * ``Scikit-learn``
     * ``gmsh-api``
-    * ``tqdm``
-* If you dont have these modules installed, click ``Install required modules``
+
+## Installation
+* Download the latest release
+* Open Blender and head over to ``Edit`` -> ``Preferences`` -> ``Add-ons`` -> ``Install``
+* Navigate to the downloaded **.zip** file and click ``Install Add-on``
 
 ## Documentation
 Read more about anton: https://anton.readthedocs.io/en/latest/

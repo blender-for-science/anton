@@ -6,7 +6,7 @@
 Welcome to anton's documentation!
 =================================
 
-.. image:: ../anton.gif
+.. image:: ../GE.gif
    :alt: anton
 
 .. image:: https://img.shields.io/badge/Blender-2.80%2B-orange
@@ -41,7 +41,7 @@ What is anton?
 --------------
 
 ``anton`` is an open-source generative design framework built on Blender, the open-source 3D creation suite. 
-At its current stage of development, anton uses a density-based topology optimization methodology as a design generator and
+At its current stage of development, anton uses a narrow-band topology optimization methodology as a design generator and
 uses implicit surfaces for mesh generation.
 
 .. toctree::
