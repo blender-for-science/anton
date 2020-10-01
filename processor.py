@@ -1,7 +1,6 @@
 import bpy
 import os
 import subprocess
-import numpy as np
 
 class Anton_OT_Processor(bpy.types.Operator):
     bl_idname = 'anton.process'

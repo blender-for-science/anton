@@ -5,7 +5,6 @@ import numpy as np
 import shutil
 from taichi.dynamics import Simulation
 
-import taichi.core as tc_core
 import taichi as tc
 import argparse
 from taichi.misc.util import get_unique_task_id
@@ -45,7 +44,7 @@ class TopoOpt(Simulation):
 
     if args.c is not None:
       suffix += '_continue'
-    
+
     self.task_id = get_unique_task_id()
     self.suffix = suffix + kwargs.get('suffix', '')
 
@@ -53,7 +52,7 @@ class TopoOpt(Simulation):
 
     self.working_directory = os.path.join(kwargs.get('working_directory', tc.get_output_directory()), self.filename, 'output', self.task_id + '_' + self.suffix)
     kwargs['working_directory'] = self.working_directory
-    
+
     self.snapshot_directory = os.path.join(self.working_directory, 'snapshots')
     self.fem_directory = os.path.join(self.working_directory, 'fem')
     self.fem_obj_directory = os.path.join(self.working_directory, 'fem_obj')
@@ -62,15 +61,12 @@ class TopoOpt(Simulation):
     os.makedirs(self.fem_directory, exist_ok=True)
     os.makedirs(self.fem_obj_directory, exist_ok=True)
     self.max_iterations = kwargs.get('max_iterations', 20)
-    
+
     self.log_fn = os.path.join(self.working_directory, 'log.txt')
     tc.start_memory_monitoring(os.path.join(self.working_directory, 'memory_usage.txt'), interval=0.1)
     tc.duplicate_stdout_to_file(self.log_fn)
     tc.redirect_print_to_log()
     tc.trace("log_fn = {}", self.log_fn)
-
-    with open(script_fn) as f:
-      script_content = f.read()
 
     shutil.copy(sys.argv[0], self.working_directory + "/")
     print(args)
@@ -192,7 +188,7 @@ class TopoOpt(Simulation):
 if __name__ == "__main__":
 
   version = 1
-  
+
   workspace_path = sys.argv[1]
   filename = sys.argv[2]
   max_iter = int(sys.argv[3])
@@ -276,7 +272,7 @@ if __name__ == "__main__":
                   nu=poisson,
                   max_iterations=max_iter,
                   wireframe_grid_size=wgridsize,
-                  wireframe_thickness=wthickness,                  
+                  wireframe_thickness=wthickness,
                   grid_update_start=5 if narrow_band else 1000000,
                   fix_cells_near_force=is_forced,
                   fix_cells_at_dirichlet=is_fixed,

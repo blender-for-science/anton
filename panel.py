@@ -1,5 +1,4 @@
 import bpy
-from bpy.props import BoolProperty
 
 class Anton_PT_Panel(bpy.types.Panel):
     bl_idname = 'ANTON_PT_panel'
@@ -45,7 +44,6 @@ class Anton_PT_Panel(bpy.types.Panel):
                     full_event=False, emboss=True)
 
         if scene.anton.mode == 'WIREFRAME':
-            row = layout.row(align=True)
             row.prop(scene.anton, "wireframe_thickness")
             row.prop(scene.anton, "wireframe_gridsize")
 
@@ -87,7 +85,7 @@ class Anton_PT_Panel(bpy.types.Panel):
             rowsub.prop(scene.anton, "smoothing_iters")
             rowsub = layout.row(align=True)
             rowsub.prop(scene.anton, "minimum_density")
-            rowsub.prop(scene.anton, "minimum_stiffness")            
+            rowsub.prop(scene.anton, "minimum_stiffness")
             rowsub = layout.row(align=True)
             rowsub.alignment = 'CENTER'
             rowsub.prop(scene.anton, "exclude_fixed_cells")

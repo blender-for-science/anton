@@ -209,7 +209,7 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 default=0.0,
                 min=0.0,
                 max=1.0,
-                description="Minimum allowable density")        
+                description="Minimum allowable density")
 
         minimum_stiffness : FloatProperty(
                 name="",
@@ -265,7 +265,7 @@ class AntonPropertyGroup(bpy.types.PropertyGroup):
                 default=0.5,
                 min=0.0,
                 max=1.0,
-                description="Objective threshold")                                                                                                
+                description="Objective threshold")
 
         step_limit : FloatProperty(
                 name="",

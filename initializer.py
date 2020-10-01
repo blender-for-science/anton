@@ -27,7 +27,7 @@ class Anton_OT_ForceUpdater(bpy.types.Operator):
 
         \\
         """
-        scene = context.scene        
+        scene = context.scene
         bpy.ops.anton.initialize()
         active_object = bpy.context.active_object
 
@@ -76,7 +76,7 @@ class Anton_OT_Initializer(bpy.types.Operator):
     bl_description = 'Initializes design space'
 
     def execute(self, context):
-        """Design space is defined with existing geometry. 
+        """Design space is defined with existing geometry.
 
         :ivar objects: List of all the obstacle objects
         :vartype objects: ``list``
@@ -100,7 +100,7 @@ class Anton_OT_Initializer(bpy.types.Operator):
 
         bpy.ops.object.modifier_add(type='TRIANGULATE')
         bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Triangulate")
-        bpy.ops.export_scene.obj(filepath=os.path.join(scene.anton.workspace_path, scene.anton.filename, scene.anton.filename + '.obj'), 
+        bpy.ops.export_scene.obj(filepath=os.path.join(scene.anton.workspace_path, scene.anton.filename, scene.anton.filename + '.obj'),
                                     check_existing=True,
                                     axis_forward='Y',
                                     axis_up='Z',

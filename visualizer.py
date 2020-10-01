@@ -31,7 +31,7 @@ class Anton_OT_Visualizer(bpy.types.Operator):
             density_file = os.path.join(scene.anton.workspace_path, scene.anton.filename, '{:05d}.densities.txt'.format(scene.anton.viz_iteration - 1))
             stl_file = os.path.join(scene.anton.workspace_path, scene.anton.filename, '{}_{:05d}.stl'.format(scene.anton.filename, scene.anton.viz_iteration))
 
-            os.system("ti run convert_fem_solve {} {}".format(viz_file, density_file))        
+            os.system("ti run convert_fem_solve {} {}".format(viz_file, density_file))
 
             if os.path.isfile(density_file):
                 self.marchthecubes(inp_path=density_file, output_path=stl_file, resolution=scene.anton.res, density_thresh=scene.anton.density_out)
@@ -64,7 +64,7 @@ class Anton_OT_Visualizer(bpy.types.Operator):
         with open(inp_path, 'r') as f:
             base_coord = np.array([0, 0, 0], dtype=np.int)
             line = f.readline()
-            
+
             while(line):
                 section_match = section_pattern.search(line)
                 coord_match = coord_pattern.search(line)
@@ -76,28 +76,25 @@ class Anton_OT_Visualizer(bpy.types.Operator):
                     if float(coord_match.group('DENSITY')) >= density_thresh:
                         verts.append(_coord)
                         densities.append(float(coord_match.group('DENSITY')))
-            
+
                 line = f.readline()
 
         pts = np.array(verts, dtype=np.int)
         lower_bound = np.floor(np.min(pts, axis=0)) - 2
         upper_bound = np.ceil(np.max(pts, axis=0)) + 2
 
-        grid, _, _ = np.mgrid[lower_bound[0]:upper_bound[0]:1, 
-                                lower_bound[1]:upper_bound[1]:1, 
+        grid, _, _ = np.mgrid[lower_bound[0]:upper_bound[0]:1,
+                                lower_bound[1]:upper_bound[1]:1,
                                 lower_bound[2]:upper_bound[2]:1]
 
         data_indices = np.array(np.ceil((pts - lower_bound)/1), dtype=np.int)
         data = 0.0 * grid
         # mask??
 
-        for i, _index in enumerate(data_indices):
+        for _index in enumerate(data_indices):
             try:
                 data[_index[0]][_index[1]][_index[2]] = 1
-            except:
-                print(_index)
-                print(np.shape(data))
-                
+
         vertices, faces, normals, _ = measure.marching_cubes(data)
         vertices = vertices + lower_bound + 0.5
         vertices = 10 * vertices/resolution - 5

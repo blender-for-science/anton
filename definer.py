@@ -2,7 +2,6 @@ from collections import OrderedDict
 import bpy
 import numpy as np
 import os
-import subprocess
 
 def get_grease_pencil(gpencil_obj_name='GPencil') -> bpy.types.GreasePencil:
     if gpencil_obj_name not in bpy.context.scene.objects:
