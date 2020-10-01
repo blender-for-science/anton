@@ -6,9 +6,9 @@
 [![License](https://img.shields.io/github/license/blender-for-science/blendmsh)](https://github.com/blender-for-science/anton/blob/master/LICENSE.md)
 [![Discord](https://img.shields.io/discord/750488363571740747?color=738ADB&label=Discord&style=flat-square)](https://discord.gg/tpq7Yuv)
 
-![anton](./anton.gif)
+![anton](./GE.gif)
 
-``anton`` is an open-source generative design framework built on Blender, the open-source 3D creation suite. At its current stage of development, anton uses a density-based topology optimization methodology as a design generator and uses implicit surfaces for mesh generation.
+``anton`` is an open-source generative design framework built on Blender, the open-source 3D creation suite. At its current stage of development, anton uses a narrow-band topology optimization methodology as a design generator and uses implicit surfaces for mesh generation.
 
 ## Installation
 * Download the latest release
