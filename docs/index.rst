@@ -3,11 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to anton's documentation!
-=================================
-
 .. image:: ../GE.gif
    :alt: anton
+
+|
 
 .. image:: https://img.shields.io/badge/Blender-2.80%2B-orange
    :target: https://www.blender.org/
@@ -25,9 +24,9 @@ Welcome to anton's documentation!
    :target: https://github.com/blender-for-science/anton/blob/master/LICENSE.md
    :alt: License
 
-.. image:: https://badges.gitter.im/blender-for-science/community.svg
-   :target: https://gitter.im/blender-for-science/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
-   :alt: Gitter
+.. image:: https://img.shields.io/discord/750488363571740747?color=738ADB&label=Discord&style=flat-square
+   :target: https://discord.gg/tpq7Yuv
+   :alt: Discord
 
 
 What is Generative design?
@@ -41,7 +40,7 @@ What is anton?
 --------------
 
 ``anton`` is an open-source generative design framework built on Blender, the open-source 3D creation suite. 
-At its current stage of development, anton uses a narrow-band topology optimization methodology as a design generator and
+At its current stage of development, anton uses a Narrow-Band Topology Optimization methodology as a design generator and
 uses implicit surfaces for mesh generation.
 
 .. toctree::

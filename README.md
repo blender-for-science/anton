@@ -19,7 +19,8 @@
     * ``gmsh-api``
 
 ## Installation
-* Download the latest release
+* For a minimal installation, download a ``native-build`` release.
+* For more advanced and reliable results, download a ``taichi-build`` release.
 * Open Blender and head over to ``Edit`` -> ``Preferences`` -> ``Add-ons`` -> ``Install``
 * Navigate to the downloaded **.zip** file and click ``Install Add-on``
 
