@@ -91,10 +91,12 @@ class Anton_OT_Visualizer(bpy.types.Operator):
         data = 0.0 * grid
         # mask??
 
-        for _index in enumerate(data_indices):
+        for _index in data_indices:
             try:
                 data[_index[0]][_index[1]][_index[2]] = 1
-
+            except:
+                pass
+            
         vertices, faces, normals, _ = measure.marching_cubes(data)
         vertices = vertices + lower_bound + 0.5
         vertices = 10 * vertices/resolution - 5

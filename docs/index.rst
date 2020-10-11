@@ -28,6 +28,7 @@
    :target: https://discord.gg/tpq7Yuv
    :alt: Discord
 
+|
 
 What is Generative design?
 --------------------------
